@@ -25,8 +25,8 @@ public class ProdutoService {
         Produto produto = new Produto();
         produto.setDescricao(dto.getDescricao());
         produto.setNome(dto.getNome());
-        produto.setPrecoCusto(dto.getPrecoCusto());
-        produto.setPrecoVenda(dto.getPrecoVenda());
+        produto.setPrecoCusto(dto.getPrecoCusto() != null ? dto.getPrecoCusto() : 0.0);
+        produto.setPrecoVenda(dto.getPrecoVenda() != null ? dto.getPrecoVenda() : 0.0);
         produto.setStatus(dto.getStatus());
         produto.setQntdEstoque(0); // sempre inicia zerado
 
