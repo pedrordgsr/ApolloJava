@@ -4,8 +4,12 @@ import com.apollo.main.dto.ProdutoRequestDTO;
 import com.apollo.main.dto.ProdutoResponseDTO;
 import com.apollo.main.model.Produto;
 import com.apollo.main.repository.ProdutoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -28,5 +32,40 @@ public class ProdutoService {
 
         Produto response = produtoRepository.save(produto);
         return new ProdutoResponseDTO(response);
+    }
+
+    public List<ProdutoResponseDTO> listarTodos () {
+        return produtoRepository.findAll()
+                .stream()
+                .map(ProdutoResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public ProdutoResponseDTO listarPorId(Long id){
+        Produto produto = produtoRepository.findById(id)
+                          .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com id: " + id));
+        return new ProdutoResponseDTO(produto);
+    }
+
+    public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com id: " + id));
+
+        produto.setDescricao(dto.getDescricao());
+        produto.setNome(dto.getNome());
+        produto.setPrecoCusto(dto.getPrecoCusto());
+        produto.setPrecoVenda(dto.getPrecoVenda());
+        produto.setStatus(dto.getStatus());
+
+        Produto response = produtoRepository.save(produto);
+        return new ProdutoResponseDTO(response);
+    }
+
+    public void deletar(Long id){
+        if(!produtoRepository.existsById(id)){
+            throw new EntityNotFoundException("Usuario não encontrado com id: " + id);
+        }
+
+        produtoRepository.deleteById(id);
     }
 }
