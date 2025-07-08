@@ -16,21 +16,20 @@ public class ProdutoRequestDTO {
     @NotNull
     private StatusProduto status;
 
+    @NotNull(message = "Nome é obrigatório")
     @NotBlank(message = "Nome é obrigatório")
     private String nome;
 
+    @NotNull(message = "Nome é obrigatório")
     @NotBlank(message = "Descrição é obrigatória")
     private String descricao;
 
-    @NotNull
     @Min(value = 0, message = "Quantidade em estoque não pode ser negativa")
     private int qntdEstoque;
 
-    @NotNull
     @Min(value = 0, message = "Preço de custo não pode ser negativo")
     private Double precoCusto;
 
-    @NotNull
     @Min(value = 0, message = "Preço de venda não pode ser negativo")
     private Double precoVenda;
 

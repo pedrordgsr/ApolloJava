@@ -1,0 +1,32 @@
+package com.apollo.main.service;
+
+import com.apollo.main.dto.ProdutoRequestDTO;
+import com.apollo.main.dto.ProdutoResponseDTO;
+import com.apollo.main.model.Produto;
+import com.apollo.main.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProdutoService {
+
+    private final ProdutoRepository produtoRepository;
+
+    @Autowired
+    public ProdutoService(ProdutoRepository produtoRepository){
+        this.produtoRepository = produtoRepository;
+    }
+
+    public ProdutoResponseDTO criar(ProdutoRequestDTO dto){
+        Produto produto = new Produto();
+        produto.setDescricao(dto.getDescricao());
+        produto.setNome(dto.getNome());
+        produto.setPrecoCusto(dto.getPrecoCusto());
+        produto.setPrecoVenda(dto.getPrecoVenda());
+        produto.setStatus(dto.getStatus());
+        produto.setQntdEstoque(0); // sempre inicia zerado
+
+        Produto response = produtoRepository.save(produto);
+        return new ProdutoResponseDTO(response);
+    }
+}
