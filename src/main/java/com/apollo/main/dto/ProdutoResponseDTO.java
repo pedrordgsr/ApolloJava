@@ -2,7 +2,7 @@ package com.apollo.main.dto;
 
 
 import com.apollo.main.model.Produto;
-import com.apollo.main.model.StatusProduto;
+import com.apollo.main.model.StatusAtivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ public class ProdutoResponseDTO {
     }
 
     private int id;
-    private StatusProduto status;
+    private StatusAtivo status;
     private String nome;
     private String descricao;
     private int qntdEstoque;

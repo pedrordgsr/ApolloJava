@@ -1,6 +1,6 @@
 package com.apollo.main.model;
 
-public enum StatusProduto {
+public enum StatusAtivo {
     ATIVO,
     INATIVO
 }

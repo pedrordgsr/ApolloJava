@@ -1,6 +1,6 @@
 package com.apollo.main.dto;
 
-import com.apollo.main.model.StatusProduto;
+import com.apollo.main.model.StatusAtivo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Min;
 public class ProdutoRequestDTO {
 
     @NotNull
-    private StatusProduto status;
+    private StatusAtivo status;
 
     @NotNull(message = "Nome é obrigatório")
     @NotBlank(message = "Nome é obrigatório")

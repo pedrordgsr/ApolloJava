@@ -43,13 +43,13 @@ public class ProdutoService {
 
     public ProdutoResponseDTO listarPorId(Long id){
         Produto produto = produtoRepository.findById(id)
-                          .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com id: " + id));
+                          .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
         return new ProdutoResponseDTO(produto);
     }
 
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto){
         Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
 
         produto.setDescricao(dto.getDescricao());
         produto.setNome(dto.getNome());
@@ -63,7 +63,7 @@ public class ProdutoService {
 
     public void deletar(Long id){
         if(!produtoRepository.existsById(id)){
-            throw new EntityNotFoundException("Usuario não encontrado com id: " + id);
+            throw new EntityNotFoundException("Produto não encontrado com id: " + id);
         }
 
         produtoRepository.deleteById(id);

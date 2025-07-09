@@ -13,24 +13,27 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusProduto status;
+    private StatusAtivo status;
 
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     @Basic
     private String nome;
 
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     @Basic
     private String descricao;
 
+    @Column(nullable = false)
     @Basic
     private int qntdEstoque;
 
+    @Column(nullable = false)
     @Basic
     private Double precoCusto;
 
+    @Column(nullable = false)
     @Basic
     private Double precoVenda;
 
