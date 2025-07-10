@@ -1,4 +1,4 @@
-package com.apollo.main.dto;
+package com.apollo.main.dto.response;
 
 
 import com.apollo.main.model.Produto;

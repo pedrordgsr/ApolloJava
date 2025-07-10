@@ -1,10 +1,11 @@
 package com.apollo.main.service;
 
-import com.apollo.main.dto.ProdutoRequestDTO;
-import com.apollo.main.dto.ProdutoResponseDTO;
+import com.apollo.main.dto.request.ProdutoRequestDTO;
+import com.apollo.main.dto.response.ProdutoResponseDTO;
 import com.apollo.main.model.Produto;
 import com.apollo.main.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +68,16 @@ public class ProdutoService {
         }
 
         produtoRepository.deleteById(id);
+    }
+
+    @Transactional
+    public String adicionarEstoque(Long id, int qntd){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
+
+        produto.setQntdEstoque(produto.getQntdEstoque() + qntd);
+        produtoRepository.save(produto);
+
+        return ("Foi adicionado ao produto " + produto.getDescricao() + " " + qntd + " unidades.");
     }
 }
