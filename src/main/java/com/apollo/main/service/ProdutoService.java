@@ -75,7 +75,8 @@ public class ProdutoService {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
 
-        produto.setQntdEstoque(produto.getQntdEstoque() + qntd);
+        int novoEstoque = produto.getQntdEstoque() + qntd;
+        produto.setQntdEstoque(novoEstoque);
         produtoRepository.save(produto);
 
         return ("Foi adicionado ao produto " + produto.getDescricao() + " " + qntd + " unidades.");

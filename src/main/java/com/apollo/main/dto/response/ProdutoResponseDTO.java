@@ -20,6 +20,7 @@ public class ProdutoResponseDTO {
         this.descricao = produto.getDescricao();
         this.precoCusto = produto.getPrecoCusto();
         this.precoVenda = produto.getPrecoVenda();
+        this.qntdEstoque = produto.getQntdEstoque();
         this.status = produto.getStatus();
     }
 
