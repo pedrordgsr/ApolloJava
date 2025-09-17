@@ -11,7 +11,7 @@ public class PedidoProduto {
 
     @Id
     @GeneratedValue
-    private int Id;
+    private Long Id;
 
     @ManyToOne
     @JoinColumn(name = "pedido_id", nullable = false)

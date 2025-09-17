@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -14,7 +15,7 @@ public abstract class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idPessoa;
+    private Long idPessoa;
 
     @Basic
     @Column(nullable = false, length = 45)
@@ -67,6 +68,6 @@ public abstract class Pessoa {
 
     @Column(nullable = false)
     @Basic
-    private Date dataCadastro;
+    private LocalDateTime dataCadastro;
 
 }

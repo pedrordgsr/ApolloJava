@@ -48,6 +48,13 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.adicionarEstoque(id, qntd));
     }
 
+    // TODO: Melhorar response dessa requisição de add e remover estoque
+
+    @PutMapping("/sub/{id}")
+    public ResponseEntity<String> removerEstoque(@PathVariable Long id, @RequestBody int qntd){
+        return ResponseEntity.ok(produtoService.removerEstoque(id, qntd));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id){
         produtoService.deletar(id);

@@ -81,4 +81,19 @@ public class ProdutoService {
 
         return ("Foi adicionado ao produto " + produto.getDescricao() + " " + qntd + " unidades.");
     }
+
+    public String removerEstoque(Long id, int qntd){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
+
+        if(produto.getQntdEstoque() < qntd){
+            throw new IllegalArgumentException("Quantidade em estoque insuficiente para remoção.");
+        }
+
+        int novoEstoque = produto.getQntdEstoque() - qntd;
+        produto.setQntdEstoque(novoEstoque);
+        produtoRepository.save(produto);
+
+        return ("Foi removido do produto " + produto.getDescricao() + " " + qntd + " unidades.");
+    }
 }
