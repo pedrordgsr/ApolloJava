@@ -3,6 +3,7 @@ package com.apollo.main.controller;
 import com.apollo.main.dto.request.ProdutoRequestDTO;
 import com.apollo.main.dto.response.ProdutoResponseDTO;
 import com.apollo.main.service.ProdutoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/produtos")
+@Tag(name = "Produto", description = "Endpoints para gerenciar produtos")
 public class ProdutoController {
 
     private final ProdutoService produtoService;
