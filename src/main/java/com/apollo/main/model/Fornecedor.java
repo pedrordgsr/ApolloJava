@@ -13,7 +13,7 @@ public class Fornecedor extends Pessoa{
 
     @Basic
     @Column
-    private String nomeFantasia;
+    private String tipoFornecedor;
 
     public Fornecedor() {
         this.setCategoria("Fornecedor");

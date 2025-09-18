@@ -1,14 +1,10 @@
 package com.apollo.main.service;
 
-import com.apollo.main.dto.request.ClienteRequestDTO;
 import com.apollo.main.dto.request.FornecedorRequestDTO;
-import com.apollo.main.dto.response.ClienteResponseDTO;
 import com.apollo.main.dto.response.FornecedorResponseDTO;
-import com.apollo.main.model.Cliente;
 import com.apollo.main.model.Fornecedor;
 import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.model.TipoPessoa;
-import com.apollo.main.repository.ClienteRepository;
 import com.apollo.main.repository.FornecedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
