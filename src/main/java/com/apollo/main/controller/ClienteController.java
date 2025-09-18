@@ -48,9 +48,10 @@ public class ClienteController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAll(@RequestParam (value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "size", defaultValue = "10") int size) {
         try {
-            return ResponseEntity.ok(clienteService.getAll());
+            return ResponseEntity.ok(clienteService.getAll(page,size));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -66,9 +67,11 @@ public class ClienteController {
     }
 
     @GetMapping("/buscar")
-    public ResponseEntity<?> getAllByNome(@RequestParam String nome){
+    public ResponseEntity<?> getAllByNome(@RequestParam String nome,
+                                          @RequestParam(value = "page", defaultValue = "0") int page,
+                                          @RequestParam(value = "size", defaultValue = "10") int size){
         try {
-            return ResponseEntity.ok(clienteService.findByName(nome));
+            return ResponseEntity.ok(clienteService.findByName(nome, page, size));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

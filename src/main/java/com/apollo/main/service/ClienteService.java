@@ -6,6 +6,8 @@ import com.apollo.main.model.Cliente;
 import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,7 +28,7 @@ public class ClienteService {
         Cliente cliente = new Cliente();
         cliente.setStatus(StatusAtivo.ATIVO);
         cliente.setNome(dto.getNome());
-        cliente.setCategoria(dto.getCategoria());
+        cliente.setCategoria("Cliente");
         cliente.setCpfcnpj(dto.getCpfcnpj());
         cliente.setIe(dto.getIe());
         cliente.setEmail(dto.getEmail());
@@ -43,9 +45,10 @@ public class ClienteService {
         return new ClienteResponseDTO(response);
     }
 
-    public List<ClienteResponseDTO> getAll(){
-        List<Cliente> clientes = clienteRepository.findAll();
-        return clientes.stream().map(ClienteResponseDTO::new).toList();
+    public Page<ClienteResponseDTO> getAll(int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Cliente> clientes = clienteRepository.findAll(pageable);
+        return clientes.map(ClienteResponseDTO::new);
     }
 
     public ClienteResponseDTO getById(Long id){
@@ -53,10 +56,11 @@ public class ClienteService {
         return new ClienteResponseDTO(cliente);
     }
 
-    public List<ClienteResponseDTO> findByName(String nome){
+    public Page<ClienteResponseDTO> findByName(String nome, int page, int size) {
         try{
-            Optional<Cliente> clientes = clienteRepository.findClienteByNomeContainingIgnoreCase(nome);
-            return clientes.stream().map(ClienteResponseDTO::new).toList();
+            Pageable pageable = Pageable.ofSize(size).withPage(page);
+            Page<Cliente> clientes = clienteRepository.findClienteByNomeContainingIgnoreCase(nome,pageable);
+            return clientes.map(ClienteResponseDTO::new);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

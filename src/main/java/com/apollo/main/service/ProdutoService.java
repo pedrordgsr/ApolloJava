@@ -7,6 +7,8 @@ import com.apollo.main.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class ProdutoService {
         this.produtoRepository = produtoRepository;
     }
 
-    public ProdutoResponseDTO criar(ProdutoRequestDTO dto){
+    public ProdutoResponseDTO create(ProdutoRequestDTO dto){
         Produto produto = new Produto();
         produto.setDescricao(dto.getDescricao());
         produto.setNome(dto.getNome());
@@ -35,20 +37,26 @@ public class ProdutoService {
         return new ProdutoResponseDTO(response);
     }
 
-    public List<ProdutoResponseDTO> listarTodos () {
-        return produtoRepository.findAll()
-                .stream()
-                .map(ProdutoResponseDTO::new)
-                .collect(Collectors.toList());
+    public Page<ProdutoResponseDTO> getAll (int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Produto> produtosPage = produtoRepository.findAll(pageable);
+        return produtosPage.map(ProdutoResponseDTO::new);
     }
 
-    public ProdutoResponseDTO listarPorId(Long id){
+    public ProdutoResponseDTO getById(Long id){
         Produto produto = produtoRepository.findById(id)
                           .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
         return new ProdutoResponseDTO(produto);
     }
 
-    public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto){
+    public Page<ProdutoResponseDTO> findByName(String nome, int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Produto> produtosPage = produtoRepository.findByNomeContainingIgnoreCase(nome, pageable);
+        return produtosPage.map(ProdutoResponseDTO::new);
+    }
+
+
+    public ProdutoResponseDTO update(Long id, ProdutoRequestDTO dto){
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
 
@@ -62,7 +70,7 @@ public class ProdutoService {
         return new ProdutoResponseDTO(response);
     }
 
-    public void deletar(Long id){
+    public void delete(Long id){
         if(!produtoRepository.existsById(id)){
             throw new EntityNotFoundException("Produto não encontrado com id: " + id);
         }
@@ -71,7 +79,7 @@ public class ProdutoService {
     }
 
     @Transactional
-    public String adicionarEstoque(Long id, int qntd){
+    public String addStock(Long id, int qntd){
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
 
@@ -82,7 +90,7 @@ public class ProdutoService {
         return ("Foi adicionado ao produto " + produto.getDescricao() + " " + qntd + " unidades.");
     }
 
-    public String removerEstoque(Long id, int qntd){
+    public String removeStock(Long id, int qntd){
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
 

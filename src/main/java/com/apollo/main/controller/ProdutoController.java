@@ -6,6 +6,7 @@ import com.apollo.main.service.ProdutoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,42 +25,50 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> criar(@Valid @RequestBody ProdutoRequestDTO dto){
-        ProdutoResponseDTO response = produtoService.criar(dto);
+    public ResponseEntity<ProdutoResponseDTO> create(@Valid @RequestBody ProdutoRequestDTO dto){
+        ProdutoResponseDTO response = produtoService.create(dto);
         return ResponseEntity.status(201).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoResponseDTO>> listarTodos(){
-        return ResponseEntity.ok(produtoService.listarTodos());
+    public ResponseEntity<Page<ProdutoResponseDTO>> getAll(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                @RequestParam(value = "size", defaultValue = "10") int size){
+        return ResponseEntity.ok(produtoService.getAll(page,size));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> listarPorId(@PathVariable Long id){
-        return ResponseEntity.ok(produtoService.listarPorId(id));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ProdutoRequestDTO dto){
-        ProdutoResponseDTO response = produtoService.atualizar(id,dto);
+    @GetMapping("/buscar")
+    public ResponseEntity<?> getByName(@RequestParam String nome,
+                                           @RequestParam(value = "page", defaultValue = "0") int page,
+                                           @RequestParam(value = "size", defaultValue = "10") int size){
+        Page<ProdutoResponseDTO> response = produtoService.findByName(nome, page, size);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/add/{id}")
-    public ResponseEntity<String> adicionarEstoque(@PathVariable Long id, @RequestBody int qntd){
-        return ResponseEntity.ok(produtoService.adicionarEstoque(id, qntd));
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoResponseDTO> getById(@PathVariable Long id){
+        return ResponseEntity.ok(produtoService.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProdutoResponseDTO> update(@PathVariable Long id, @Valid @RequestBody ProdutoRequestDTO dto){
+        ProdutoResponseDTO response = produtoService.update(id,dto);
+        return ResponseEntity.ok(response);
     }
 
     // TODO: Melhorar response dessa requisição de add e remover estoque
+    @PutMapping("/add/{id}")
+    public ResponseEntity<String> addStock(@PathVariable Long id, @RequestBody int qntd){
+        return ResponseEntity.ok(produtoService.addStock(id, qntd));
+    }
 
     @PutMapping("/sub/{id}")
-    public ResponseEntity<String> removerEstoque(@PathVariable Long id, @RequestBody int qntd){
-        return ResponseEntity.ok(produtoService.removerEstoque(id, qntd));
+    public ResponseEntity<String> removeStock(@PathVariable Long id, @RequestBody int qntd){
+        return ResponseEntity.ok(produtoService.removeStock(id, qntd));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id){
-        produtoService.deletar(id);
+    public ResponseEntity<String> delete(@PathVariable Long id){
+        produtoService.delete(id);
         return ResponseEntity.ok("Produto " + id + " Deletado!");
     }
 
