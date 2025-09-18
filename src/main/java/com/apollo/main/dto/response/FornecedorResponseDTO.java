@@ -1,6 +1,5 @@
 package com.apollo.main.dto.response;
 
-import com.apollo.main.model.Cliente;
 import com.apollo.main.model.Fornecedor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

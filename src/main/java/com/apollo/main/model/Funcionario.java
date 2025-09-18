@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,14 +16,14 @@ public class Funcionario extends Pessoa{
 
     @Basic
     @Column(nullable = false)
-    private Date dataAdmissao;
+    private LocalDateTime dataAdmissao;
 
     @Basic
     @Column(nullable = false)
     private Double salario;
 
     @Column(nullable = true)
-    private Date dataDemissao;
+    private LocalDateTime dataDemissao;
 
     public Funcionario() {
         this.setCategoria("Funcionario");
