@@ -4,6 +4,7 @@ import com.apollo.main.dto.request.ClienteRequestDTO;
 import com.apollo.main.dto.response.ClienteResponseDTO;
 import com.apollo.main.model.Cliente;
 import com.apollo.main.model.StatusAtivo;
+import com.apollo.main.model.TipoPessoa;
 import com.apollo.main.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ public class ClienteService {
         cliente.setStatus(StatusAtivo.ATIVO);
         cliente.setNome(dto.getNome());
         cliente.setCategoria("Cliente");
+        cliente.setTipoPessoa(TipoPessoa.valueOf(dto.getTipoPessoa()));
         cliente.setCpfcnpj(dto.getCpfcnpj());
         cliente.setIe(dto.getIe());
         cliente.setEmail(dto.getEmail());
@@ -70,7 +72,7 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         cliente.setNome(dto.getNome());
-        cliente.setCategoria(dto.getCategoria());
+        cliente.setTipoPessoa(TipoPessoa.valueOf(dto.getTipoPessoa()));
         cliente.setCpfcnpj(dto.getCpfcnpj());
         cliente.setIe(dto.getIe());
         cliente.setEmail(dto.getEmail());

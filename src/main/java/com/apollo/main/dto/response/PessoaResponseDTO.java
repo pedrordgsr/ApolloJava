@@ -1,6 +1,7 @@
 package com.apollo.main.dto.response;
 
 import com.apollo.main.model.Pessoa;
+import com.apollo.main.model.TipoPessoa;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class PessoaResponseDTO {
     private String status;
     private String nome;
     private String categoria;
+    private String tipoPessoa;
     private String cpfCnpj;
     private String ie;
     private String email;
@@ -29,6 +31,7 @@ public class PessoaResponseDTO {
     public PessoaResponseDTO(Pessoa pessoa){
         this.id = pessoa.getIdPessoa();
         this.status = pessoa.getStatus().name();
+        this.tipoPessoa = pessoa.getTipoPessoa().name();
         this.nome = pessoa.getNome();
         this.categoria = pessoa.getCategoria();
         this.cpfCnpj = pessoa.getCpfcnpj();

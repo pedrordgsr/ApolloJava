@@ -1,6 +1,7 @@
 package com.apollo.main.dto.request;
 
 import com.apollo.main.model.StatusAtivo;
+import com.apollo.main.model.TipoPessoa;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class PessoaRequestDTO {
     private String nome;
 
     @NotNull
-    private String categoria;
+    private String tipoPessoa;
 
     @NotNull
     private String cpfcnpj;

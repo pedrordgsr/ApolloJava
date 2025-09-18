@@ -30,6 +30,11 @@ public abstract class Pessoa {
     @Basic
     private String categoria;
 
+    @Basic
+    @Column(nullable = false, length = 45)
+    @Enumerated(EnumType.STRING)
+    private TipoPessoa tipoPessoa;
+
     @Column(nullable = false, length = 45)
     @Basic
     private String cpfcnpj;
