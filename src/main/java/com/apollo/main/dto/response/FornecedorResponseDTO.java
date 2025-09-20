@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class FornecedorResponseDTO extends PessoaResponseDTO{
-    private String nomeFantasia;
+    private String tipoFornecedor;
 
     public FornecedorResponseDTO(Fornecedor fornecedor) {
         super(fornecedor);
-        this.nomeFantasia = fornecedor.getNomeFantasia();
+        this.tipoFornecedor = fornecedor.getTipoFornecedor();
     }
 }

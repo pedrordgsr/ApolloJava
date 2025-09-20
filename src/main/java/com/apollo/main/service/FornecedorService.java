@@ -38,7 +38,7 @@ public class FornecedorService {
         fornecedor.setCidade(dto.getCidade());
         fornecedor.setUf(dto.getUf());
         fornecedor.setCep(dto.getCep());
-        fornecedor.setNomeFantasia(dto.getNomeFantasia());
+        fornecedor.setTipoFornecedor(dto.getTipoFornecedor());
         fornecedor.setDataCadastro(LocalDateTime.now());
         Fornecedor response = fornecedorRepository.save(fornecedor);
 
@@ -80,7 +80,7 @@ public class FornecedorService {
         fornecedor.setCidade(dto.getCidade());
         fornecedor.setUf(dto.getUf());
         fornecedor.setCep(dto.getCep());
-        fornecedor.setNomeFantasia(dto.getNomeFantasia());
+        fornecedor.setTipoFornecedor(dto.getTipoFornecedor());
         Fornecedor response = fornecedorRepository.save(fornecedor);
         return new FornecedorResponseDTO(response);
     }

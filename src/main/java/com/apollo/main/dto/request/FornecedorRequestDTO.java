@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FornecedorRequestDTO extends PessoaRequestDTO{
-    private String nomeFantasia;
+    private String tipoFornecedor;
 }
