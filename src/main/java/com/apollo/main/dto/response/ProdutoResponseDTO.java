@@ -24,7 +24,7 @@ public class ProdutoResponseDTO {
         this.status = produto.getStatus();
     }
 
-    private int id;
+    private Long id;
     private StatusAtivo status;
     private String nome;
     private String descricao;

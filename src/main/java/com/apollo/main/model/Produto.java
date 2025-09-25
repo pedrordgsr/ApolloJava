@@ -11,7 +11,7 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(length = 45, nullable = false)
     @Enumerated(EnumType.STRING)

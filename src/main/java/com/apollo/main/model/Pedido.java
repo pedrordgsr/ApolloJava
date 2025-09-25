@@ -32,7 +32,11 @@ public class Pedido {
     @Column()
     private LocalDateTime vencimento;
 
-    private Double valor;
+    @Column(precision = 10, scale = 2)
+    private Double totalCusto;
+
+    @Column(precision = 10, scale = 2)
+    private Double totalVenda;
 
     private String formaPagamento;
 
