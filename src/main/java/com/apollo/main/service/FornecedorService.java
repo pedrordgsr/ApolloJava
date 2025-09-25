@@ -95,11 +95,13 @@ public class FornecedorService {
         Fornecedor fornecedor = fornecedorRepository.findById(id).orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));
         if(fornecedor.getStatus() == StatusAtivo.ATIVO){
             fornecedor.setStatus(StatusAtivo.INATIVO);
+            fornecedorRepository.save(fornecedor);
+            return "Fornecedor " + fornecedor.getNome() + " desativado com sucesso";
         } else {
             fornecedor.setStatus(StatusAtivo.ATIVO);
+            fornecedorRepository.save(fornecedor);
+            return "Fornecedor " + fornecedor.getNome() + " ativado com sucesso";
         }
-        fornecedorRepository.save(fornecedor);
-        return fornecedor.getStatus().name();
     }
 
 }

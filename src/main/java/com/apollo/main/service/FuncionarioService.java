@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -93,27 +94,32 @@ public class FuncionarioService {
         return "Funcionario " + funcionario.getNome() + " deletado com sucesso";
     }
 
-    public String switchStatus(Long id){
-        Funcionario funcionario = funcionarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Funcionario não encontrado"));
-        if(funcionario.getStatus() == StatusAtivo.ATIVO){
-            funcionario.setStatus(StatusAtivo.INATIVO);
-        } else {
-            funcionario.setStatus(StatusAtivo.ATIVO);
-        }
-        funcionarioRepository.save(funcionario);
-        return funcionario.getStatus().name();
-    }
-
     public String demote(Long id){
         Funcionario funcionario = funcionarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Funcionario não encontrado"));
 
         if(funcionario.getStatus() == StatusAtivo.INATIVO){
-            return (funcionario.getStatus().name() + " ja foi desligado da empresa!");
+            return (funcionario.getNome() + " ja foi desligado da empresa!");
         }
         else {
             funcionario.setStatus(StatusAtivo.INATIVO);
+            funcionario.setDataDemissao(LocalDateTime.now());
             funcionarioRepository.save(funcionario);
-            return (funcionario.getStatus().name() + "Foi desligado da empresa!");
+            return (funcionario.getNome() + " Foi desligado da empresa!");
+        }
+    }
+
+    public String reengage(Long id){
+        Funcionario funcionario = funcionarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Funcionario não encontrado"));
+
+        if(funcionario.getStatus() == StatusAtivo.ATIVO){
+            return (funcionario.getNome() + " ainda está empregado!");
+        }
+        else {
+            funcionario.setStatus(StatusAtivo.ATIVO);
+            funcionario.setDataDemissao(null);
+            funcionario.setDataAdmissao(LocalDateTime.now());
+            funcionarioRepository.save(funcionario);
+            return (funcionario.getNome() + " Foi readmitido na empresa!");
         }
     }
 
