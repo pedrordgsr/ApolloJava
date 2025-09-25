@@ -26,8 +26,10 @@ public class Pedido {
     @Enumerated(EnumType.STRING)
     private TipoPedido tipo;
 
+    @Column(nullable = false)
     private LocalDateTime dataEmissao;
 
+    @Column()
     private LocalDateTime vencimento;
 
     private Double valor;
