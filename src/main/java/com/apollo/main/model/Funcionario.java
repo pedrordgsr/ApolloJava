@@ -22,6 +22,9 @@ public class Funcionario extends Pessoa{
     @Column(nullable = false)
     private Double salario;
 
+    @Column(nullable = false)
+    private String cargo;
+
     @Column(nullable = true)
     private LocalDateTime dataDemissao;
 

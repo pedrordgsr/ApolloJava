@@ -23,7 +23,8 @@ public class Pedido {
     private StatusPedido status;
 
     @Basic
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoPedido tipo;
 
     private LocalDateTime dataEmissao;
 
@@ -36,6 +37,10 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "id_pessoa")
     private Pessoa pessoa;
+
+    @ManyToOne
+    @JoinColumn(name = "id_funcionario")
+    private Funcionario funcionario;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoProduto> itens = new ArrayList<>();
