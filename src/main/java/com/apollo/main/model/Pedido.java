@@ -38,6 +38,7 @@ public class Pedido {
     @Column(precision = 10, scale = 2)
     private Double totalVenda;
 
+    @Column
     private String formaPagamento;
 
     @ManyToOne
