@@ -1,11 +1,9 @@
 package com.apollo.main.service;
 
+import com.apollo.main.dto.request.PedidoProdutoRequestDTO;
 import com.apollo.main.dto.request.PedidoRequestDTO;
 import com.apollo.main.dto.response.PedidoResponseDTO;
-import com.apollo.main.model.Cliente;
-import com.apollo.main.model.Funcionario;
-import com.apollo.main.model.Pedido;
-import com.apollo.main.model.TipoPedido;
+import com.apollo.main.model.*;
 import com.apollo.main.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Service
@@ -58,12 +57,19 @@ public class PedidoService {
             pedido.setPessoa(cliente);
             pedido.setFuncionario(funcionario);
             pedido.setItens(new ArrayList<>());
+            pedido.setDataEmissao(LocalDateTime.now());
 
             BigDecimal valor = new BigDecimal(0.0);
 
-            for(var item : dto.getItens()) {
-                var produto = produtoRepository.findById(item.getProduto().getId())
-                        .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + item.getProduto().getId()));
+            for(PedidoProdutoRequestDTO itemDto : dto.getItens()) {
+                var produto = produtoRepository.findById(itemDto.getProdutoId())
+                        .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + itemDto.getProdutoId()));
+
+                PedidoProduto item = new PedidoProduto();
+                item.setPedido(pedido);
+                item.setProduto(produto);
+
+                item.setQntd(itemDto.getQntd());
 
                 if(produto.getQntdEstoque() < item.getQntd()) {
                     throw new IllegalArgumentException("Estoque insuficiente para o produto: " + produto.getNome());
@@ -71,14 +77,12 @@ public class PedidoService {
 
                 produtoService.removeStock(produto.getId(), item.getQntd());
 
-                item.setPedido(pedido);
-
                 BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
 
                 valor.add(produto.getPrecoVenda().multiply(qntdBigDecimal));
 
-                item.setPrecoCustoUN(produto.getPrecoVenda());
                 item.setPrecoVendaUN(produto.getPrecoCusto());
+                item.setPrecoCustoUN(produto.getPrecoCusto());
 
                 pedido.getItens().add(item);
             }

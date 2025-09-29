@@ -16,5 +16,5 @@ public class PedidoRequestDTO {
     private String formaPagamento;
     private Long idPessoa;
     private Long idFuncionario;
-    private List<PedidoProduto> itens;
+    private List<PedidoProdutoRequestDTO> itens;
 }

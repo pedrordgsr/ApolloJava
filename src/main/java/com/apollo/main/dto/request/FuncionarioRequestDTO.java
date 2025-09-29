@@ -10,5 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 public class FuncionarioRequestDTO extends PessoaRequestDTO{
     private LocalDateTime dataAdmissao;
+    private String cargo;
     private BigDecimal salario;
 }

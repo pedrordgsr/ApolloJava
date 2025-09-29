@@ -35,7 +35,7 @@ public class Produto {
     @Basic
     private BigDecimal precoCusto;
 
-    @Column(nullable = false, scale = 10, precision = 10)
+    @Column(nullable = false, scale = 2, precision = 10)
     @Basic
     private BigDecimal precoVenda;
 

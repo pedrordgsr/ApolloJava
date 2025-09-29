@@ -13,12 +13,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FuncionarioResponseDTO extends PessoaResponseDTO{
     private LocalDateTime dataAdmissao;
+    private String cargo;
     private BigDecimal salario;
     private LocalDateTime dataDemissao;
+
 
     public FuncionarioResponseDTO(Funcionario funcionario) {
         super(funcionario);
         this.dataAdmissao = funcionario.getDataAdmissao();
+        this.cargo = funcionario.getCargo();
         this.salario = funcionario.getSalario();
         this.dataDemissao = funcionario.getDataDemissao();
     }

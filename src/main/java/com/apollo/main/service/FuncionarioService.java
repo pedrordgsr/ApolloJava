@@ -42,6 +42,7 @@ public class FuncionarioService {
         funcionario.setDataAdmissao(dto.getDataAdmissao());
         funcionario.setSalario(dto.getSalario());
         funcionario.setDataCadastro(LocalDateTime.now());
+        funcionario.setCargo(dto.getCargo());
         Funcionario response = funcionarioRepository.save(funcionario);
 
         return new FuncionarioResponseDTO(response);
@@ -84,6 +85,7 @@ public class FuncionarioService {
         funcionario.setCep(dto.getCep());
         funcionario.setDataAdmissao(dto.getDataAdmissao());
         funcionario.setSalario(dto.getSalario());
+        funcionario.setCargo(dto.getCargo());
         Funcionario response = funcionarioRepository.save(funcionario);
         return new FuncionarioResponseDTO(response);
     }
