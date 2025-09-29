@@ -23,9 +23,6 @@ public class ProdutoRequestDTO {
     @NotBlank(message = "Descrição é obrigatória")
     private String descricao;
 
-    @Min(value = 0, message = "Quantidade em estoque não pode ser negativa")
-    private int qntdEstoque;
-
     @Min(value = 0, message = "Preço de custo não pode ser negativo")
     private BigDecimal precoCusto;
 

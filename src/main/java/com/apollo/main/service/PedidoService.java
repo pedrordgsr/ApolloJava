@@ -52,6 +52,7 @@ public class PedidoService {
 
             Pedido pedido = new Pedido();
             pedido.setTipo(TipoPedido.VENDA);
+            pedido.setStatus(StatusPedido.ORCAMENTO);
             pedido.setVencimento(dto.getVencimento());
             pedido.setFormaPagamento(dto.getFormaPagamento());
             pedido.setPessoa(cliente);
@@ -60,6 +61,7 @@ public class PedidoService {
             pedido.setDataEmissao(LocalDateTime.now());
 
             BigDecimal valor = new BigDecimal(0.0);
+            BigDecimal custo = new BigDecimal(0.0);
 
             for(PedidoProdutoRequestDTO itemDto : dto.getItens()) {
                 var produto = produtoRepository.findById(itemDto.getProdutoId())
@@ -79,7 +81,8 @@ public class PedidoService {
 
                 BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
 
-                valor.add(produto.getPrecoVenda().multiply(qntdBigDecimal));
+                valor = valor.add(produto.getPrecoVenda().multiply(qntdBigDecimal));
+                custo = custo.add(produto.getPrecoCusto().multiply(qntdBigDecimal));
 
                 item.setPrecoVendaUN(produto.getPrecoCusto());
                 item.setPrecoCustoUN(produto.getPrecoCusto());
@@ -88,6 +91,7 @@ public class PedidoService {
             }
 
             pedido.setTotalVenda(valor);
+            pedido.setTotalCusto(custo);
             Pedido savedPedido = pedidoRepository.save(pedido);
             return new PedidoResponseDTO(savedPedido);
 
