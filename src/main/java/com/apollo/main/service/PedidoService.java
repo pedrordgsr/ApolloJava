@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Service
@@ -58,7 +59,7 @@ public class PedidoService {
             pedido.setFuncionario(funcionario);
             pedido.setItens(new ArrayList<>());
 
-            Double valor = 0.0;
+            BigDecimal valor = new BigDecimal(0.0);
 
             for(var item : dto.getItens()) {
                 var produto = produtoRepository.findById(item.getProduto().getId())
@@ -71,7 +72,14 @@ public class PedidoService {
                 produtoService.removeStock(produto.getId(), item.getQntd());
 
                 item.setPedido(pedido);
-                valor += produto.getPrecoVenda() * item.getQntd();
+
+                BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
+
+                valor.add(produto.getPrecoVenda().multiply(qntdBigDecimal));
+
+                item.setPrecoCustoUN(produto.getPrecoVenda());
+                item.setPrecoVendaUN(produto.getPrecoCusto());
+
                 pedido.getItens().add(item);
             }
 

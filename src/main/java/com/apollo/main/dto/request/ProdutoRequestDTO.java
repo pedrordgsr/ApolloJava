@@ -15,9 +15,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProdutoRequestDTO {
 
-    @NotNull(message = "Informe o status")
-    private StatusAtivo status;
-
     @NotNull(message = "Nome é obrigatório")
     @NotBlank(message = "Nome é obrigatório")
     private String nome;

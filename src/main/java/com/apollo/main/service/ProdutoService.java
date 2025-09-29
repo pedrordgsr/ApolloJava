@@ -3,6 +3,7 @@ package com.apollo.main.service;
 import com.apollo.main.dto.request.ProdutoRequestDTO;
 import com.apollo.main.dto.response.ProdutoResponseDTO;
 import com.apollo.main.model.Produto;
+import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,9 +30,9 @@ public class ProdutoService {
         Produto produto = new Produto();
         produto.setDescricao(dto.getDescricao());
         produto.setNome(dto.getNome());
-        produto.setPrecoCusto(dto.getPrecoCusto() != null ? dto.getPrecoCusto() : 0.0);
-        produto.setPrecoVenda(dto.getPrecoVenda() != null ? dto.getPrecoVenda() : 0.0);
-        produto.setStatus(dto.getStatus());
+        produto.setPrecoCusto(dto.getPrecoCusto() != null ? dto.getPrecoCusto() : new BigDecimal("0.0"));
+        produto.setPrecoVenda(dto.getPrecoVenda() != null ? dto.getPrecoVenda() : new BigDecimal("0.0"));
+        produto.setStatus(StatusAtivo.ATIVO);
         produto.setQntdEstoque(0); // sempre inicia zerado
 
         Produto response = produtoRepository.save(produto);
@@ -64,7 +66,7 @@ public class ProdutoService {
         produto.setNome(dto.getNome());
         produto.setPrecoCusto(dto.getPrecoCusto());
         produto.setPrecoVenda(dto.getPrecoVenda());
-        produto.setStatus(dto.getStatus());
+        produto.setStatus(produto.getStatus());
 
         Produto response = produtoRepository.save(produto);
         return new ProdutoResponseDTO(response);

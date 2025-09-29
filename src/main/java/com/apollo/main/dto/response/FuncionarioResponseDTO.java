@@ -1,5 +1,6 @@
 package com.apollo.main.dto.response;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.apollo.main.model.Funcionario;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FuncionarioResponseDTO extends PessoaResponseDTO{
     private LocalDateTime dataAdmissao;
-    private Double salario;
+    private BigDecimal salario;
     private LocalDateTime dataDemissao;
 
     public FuncionarioResponseDTO(Funcionario funcionario) {

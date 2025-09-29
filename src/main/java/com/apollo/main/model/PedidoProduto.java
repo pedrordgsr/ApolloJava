@@ -25,7 +25,11 @@ public class PedidoProduto {
 
     @Basic
     @Column(nullable = false,scale = 2, precision = 10)
-    private BigDecimal ValorUN;
+    private BigDecimal precoVendaUN;
+
+    @Basic
+    @Column(nullable = false,scale = 2, precision = 10)
+    private BigDecimal precoCustoUN;
 
     @Basic
     @Column(nullable = false)
