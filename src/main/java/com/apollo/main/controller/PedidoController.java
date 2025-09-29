@@ -1,6 +1,7 @@
 package com.apollo.main.controller;
 
 import com.apollo.main.dto.request.PedidoRequestDTO;
+import com.apollo.main.dto.response.PedidoResponseDTO;
 import com.apollo.main.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,8 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<?> createPedido(@RequestBody PedidoRequestDTO dto) {
         try {
-            return ResponseEntity.ok(pedidoService.createPedido(dto));
+            PedidoResponseDTO response = pedidoService.createPedido(dto);
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

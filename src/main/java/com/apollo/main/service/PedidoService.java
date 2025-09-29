@@ -84,7 +84,7 @@ public class PedidoService {
                 valor = valor.add(produto.getPrecoVenda().multiply(qntdBigDecimal));
                 custo = custo.add(produto.getPrecoCusto().multiply(qntdBigDecimal));
 
-                item.setPrecoVendaUN(produto.getPrecoCusto());
+                item.setPrecoVendaUN(produto.getPrecoVenda());
                 item.setPrecoCustoUN(produto.getPrecoCusto());
 
                 pedido.getItens().add(item);

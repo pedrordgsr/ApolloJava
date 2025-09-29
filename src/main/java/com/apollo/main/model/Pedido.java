@@ -1,5 +1,6 @@
 package com.apollo.main.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,5 +52,6 @@ public class Pedido {
     private Funcionario funcionario;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<PedidoProduto> itens = new ArrayList<>();
 }

@@ -2,11 +2,16 @@ package com.apollo.main.dto.response;
 
 import com.apollo.main.model.Pedido;
 import com.apollo.main.model.PedidoProduto;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class PedidoResponseDTO {
     private Long idPedido;
     private String status;
@@ -18,7 +23,7 @@ public class PedidoResponseDTO {
     private String formaPagamento;
     private Long idPessoa;
     private Long idFuncionario;
-    private List<PedidoProduto> itens;
+    private List<PedidoProdutoResponseDTO> itens;
 
     public PedidoResponseDTO(Pedido pedido){
         this.idPedido = pedido.getIdPedido();
@@ -31,7 +36,7 @@ public class PedidoResponseDTO {
         this.formaPagamento = pedido.getFormaPagamento();
         this.idPessoa = pedido.getPessoa().getIdPessoa();
         this.idFuncionario = pedido.getFuncionario().getIdPessoa();
-        this.itens = pedido.getItens();
+        this.itens = pedido.getItens().stream().map(PedidoProdutoResponseDTO::new).collect(Collectors.toList());
     }
 
 }
