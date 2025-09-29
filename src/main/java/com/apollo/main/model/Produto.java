@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -29,12 +31,12 @@ public class Produto {
     @Basic
     private int qntdEstoque;
 
-    @Column(nullable = false)
+    @Column(nullable = false, scale = 2, precision = 10)
     @Basic
-    private Double precoCusto;
+    private BigDecimal precoCusto;
 
-    @Column(nullable = false)
+    @Column(nullable = false, scale = 10, precision = 10)
     @Basic
-    private Double precoVenda;
+    private BigDecimal precoVenda;
 
 }

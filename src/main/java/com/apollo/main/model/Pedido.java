@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,10 +34,10 @@ public class Pedido {
     private LocalDateTime vencimento;
 
     @Column(precision = 10, scale = 2)
-    private Double totalCusto;
+    private BigDecimal totalCusto;
 
     @Column(precision = 10, scale = 2)
-    private Double totalVenda;
+    private BigDecimal totalVenda;
 
     @Column
     private String formaPagamento;

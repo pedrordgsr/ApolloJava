@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -22,8 +24,8 @@ public class PedidoProduto {
     private Produto produto;
 
     @Basic
-    @Column(nullable = false)
-    private Double ValorUN;
+    @Column(nullable = false,scale = 2, precision = 10)
+    private BigDecimal ValorUN;
 
     @Basic
     @Column(nullable = false)

@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,9 +30,9 @@ public class ProdutoRequestDTO {
     private int qntdEstoque;
 
     @Min(value = 0, message = "Preço de custo não pode ser negativo")
-    private Double precoCusto;
+    private BigDecimal precoCusto;
 
     @Min(value = 0, message = "Preço de venda não pode ser negativo")
-    private Double precoVenda;
+    private BigDecimal precoVenda;
 
 }

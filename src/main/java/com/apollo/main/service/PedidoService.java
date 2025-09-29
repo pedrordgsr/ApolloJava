@@ -1,7 +1,7 @@
 package com.apollo.main.service;
 
-import com.apollo.main.dto.request.Pedido.PedidoRequestDTO;
-import com.apollo.main.dto.request.Pedido.PedidoResponseDTO;
+import com.apollo.main.dto.request.PedidoRequestDTO;
+import com.apollo.main.dto.response.PedidoResponseDTO;
 import com.apollo.main.model.Cliente;
 import com.apollo.main.model.Funcionario;
 import com.apollo.main.model.Pedido;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PedidoService {

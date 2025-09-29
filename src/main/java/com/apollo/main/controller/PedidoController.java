@@ -1,6 +1,6 @@
 package com.apollo.main.controller;
 
-import com.apollo.main.dto.request.Pedido.PedidoRequestDTO;
+import com.apollo.main.dto.request.PedidoRequestDTO;
 import com.apollo.main.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

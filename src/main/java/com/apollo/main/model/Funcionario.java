@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,8 +20,8 @@ public class Funcionario extends Pessoa{
     private LocalDateTime dataAdmissao;
 
     @Basic
-    @Column(nullable = false)
-    private Double salario;
+    @Column(nullable = false,scale = 2, precision = 10)
+    private BigDecimal salario;
 
     @Column(nullable = false)
     private String cargo;

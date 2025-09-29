@@ -1,4 +1,4 @@
-package com.apollo.main.dto.request.Pedido;
+package com.apollo.main.dto.request;
 
 import com.apollo.main.model.PedidoProduto;
 import com.apollo.main.model.TipoPedido;
