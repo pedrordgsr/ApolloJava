@@ -3,6 +3,7 @@ package com.apollo.main.controller;
 import com.apollo.main.dto.request.FuncionarioRequestDTO;
 import com.apollo.main.service.FuncionarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class FuncionarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody FuncionarioRequestDTO dto) {
+    public ResponseEntity<?> create(@Valid @RequestBody FuncionarioRequestDTO dto) {
         try{
             return ResponseEntity.ok(funcionarioService.create(dto));
         } catch (Exception e) {
@@ -29,7 +30,7 @@ public class FuncionarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FuncionarioRequestDTO dto){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody FuncionarioRequestDTO dto){
         try {
             return ResponseEntity.ok(funcionarioService.update(id, dto));
         } catch (Exception e) {

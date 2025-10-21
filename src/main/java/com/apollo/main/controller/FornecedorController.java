@@ -4,6 +4,7 @@ package com.apollo.main.controller;
 import com.apollo.main.dto.request.FornecedorRequestDTO;
 import com.apollo.main.service.FornecedorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class FornecedorController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody FornecedorRequestDTO dto){
+    public ResponseEntity<?> create(@Valid @RequestBody FornecedorRequestDTO dto){
         try {
             return ResponseEntity.ok(fornecedorService.create(dto));
         } catch (Exception e) {
@@ -30,7 +31,7 @@ public class FornecedorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FornecedorRequestDTO dto){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody FornecedorRequestDTO dto){
         try {
             return ResponseEntity.ok(fornecedorService.update(id, dto));
         } catch (Exception e) {

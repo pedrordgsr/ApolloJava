@@ -1,47 +1,47 @@
 package com.apollo.main.dto.request;
 
-import com.apollo.main.model.StatusAtivo;
-import com.apollo.main.model.TipoPessoa;
+import com.apollo.main.validation.ValidCpfCnpj;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class PessoaRequestDTO {
 
-    @NotNull
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
 
-    @NotNull
+    @NotNull(message = "Tipo de pessoa é obrigatório")
     private String tipoPessoa;
 
-    @NotNull
+    @NotBlank(message = "CPF/CNPJ é obrigatório")
+    @ValidCpfCnpj(message = "CPF ou CNPJ inválido")
     private String cpfcnpj;
 
     private String ie;
 
+    @Email(message = "Email inválido")
     private String email;
 
     private int telefone;
 
-    @NotNull
+    @NotBlank(message = "Endereço é obrigatório")
     private String endereco;
 
-    @NotNull
+    @NotBlank(message = "Bairro é obrigatório")
     private String bairro;
 
-    @NotNull
+    @NotBlank(message = "Cidade é obrigatória")
     private String cidade;
 
-    @NotNull
+    @NotBlank(message = "UF é obrigatório")
     private String uf;
 
-    @NotNull
+    @NotNull(message = "CEP é obrigatório")
     private int cep;
 }

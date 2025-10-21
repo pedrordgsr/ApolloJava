@@ -4,6 +4,7 @@ package com.apollo.main.controller;
 import com.apollo.main.dto.request.ClienteRequestDTO;
 import com.apollo.main.service.ClienteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ClienteRequestDTO dto){
+    public ResponseEntity<?> create(@Valid @RequestBody ClienteRequestDTO dto){
         try {
             return ResponseEntity.ok(clienteService.create(dto));
         } catch (Exception e) {
@@ -30,7 +31,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ClienteRequestDTO dto){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody ClienteRequestDTO dto){
         try {
             return ResponseEntity.ok(clienteService.update(id, dto));
         } catch (Exception e) {
