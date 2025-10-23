@@ -72,6 +72,16 @@ public class ProdutoController {
         return ResponseEntity.ok("Produto " + id + " Deletado!");
     }
 
+    @PostMapping("/status/{id}")
+    public ResponseEntity<?> switchStatus(@PathVariable Long id) {
+        try{
+            String response = produtoService.switchStatus(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }

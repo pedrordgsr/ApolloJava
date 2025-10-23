@@ -33,7 +33,7 @@ public class ProdutoService {
         produto.setPrecoCusto(dto.getPrecoCusto() != null ? dto.getPrecoCusto() : new BigDecimal("0.0"));
         produto.setPrecoVenda(dto.getPrecoVenda() != null ? dto.getPrecoVenda() : new BigDecimal("0.0"));
         produto.setStatus(StatusAtivo.ATIVO);
-        produto.setQntdEstoque(0); // sempre inicia zerado
+        produto.setQntdEstoque(0);
 
         Produto response = produtoRepository.save(produto);
         return new ProdutoResponseDTO(response);
@@ -105,5 +105,19 @@ public class ProdutoService {
         produtoRepository.save(produto);
 
         return ("Foi removido do produto " + produto.getDescricao() + " " + qntd + " unidades.");
+    }
+
+    public String switchStatus(Long id){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com id: " + id));
+
+        if(produto.getStatus() == StatusAtivo.ATIVO){
+            produto.setStatus(StatusAtivo.INATIVO);
+        } else {
+            produto.setStatus(StatusAtivo.ATIVO);
+        }
+
+        produtoRepository.save(produto);
+        return "O status do produto " + produto.getDescricao() + " foi alterado para " + produto.getStatus();
     }
 }
