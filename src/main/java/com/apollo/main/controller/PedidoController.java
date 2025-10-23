@@ -25,7 +25,7 @@ public class PedidoController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro interno do servidor");
+            return ResponseEntity.status(500).body(e);
         }
     }
 
@@ -36,7 +36,31 @@ public class PedidoController {
         try {
             return ResponseEntity.ok(pedidoService.getAllPedidos(page, size));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro interno do servidor");
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping("/invoice")
+    public ResponseEntity<?> invoicePedido(@RequestParam Long pedidoId) {
+        try {
+            PedidoResponseDTO response = pedidoService.invoicePedido(pedidoId);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<?> cancelPedido(@RequestParam Long pedidoId) {
+        try {
+            PedidoResponseDTO response = pedidoService.cancelPedido(pedidoId);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e);
         }
     }
 

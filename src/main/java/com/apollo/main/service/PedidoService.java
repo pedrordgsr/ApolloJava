@@ -70,14 +70,7 @@ public class PedidoService {
                 PedidoProduto item = new PedidoProduto();
                 item.setPedido(pedido);
                 item.setProduto(produto);
-
                 item.setQntd(itemDto.getQntd());
-
-                if(produto.getQntdEstoque() < item.getQntd()) {
-                    throw new IllegalArgumentException("Estoque insuficiente para o produto: " + produto.getNome());
-                }
-
-                produtoService.removeStock(produto.getId(), item.getQntd());
 
                 BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
 
@@ -122,14 +115,7 @@ public class PedidoService {
                 PedidoProduto item = new PedidoProduto();
                 item.setPedido(pedido);
                 item.setProduto(produto);
-
                 item.setQntd(itemDto.getQntd());
-
-                if(produto.getQntdEstoque() < item.getQntd()) {
-                    throw new IllegalArgumentException("Estoque insuficiente para o produto: " + produto.getNome());
-                }
-
-                produtoService.addStock(produto.getId(), item.getQntd());
 
                 BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
 
@@ -159,9 +145,53 @@ public class PedidoService {
         return new PedidoResponseDTO(pedido);
     }
 
+    public PedidoResponseDTO invoicePedido(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
+
+        if(pedido.getStatus() == StatusPedido.FATURADO) {
+            throw new IllegalArgumentException("Pedido já está faturado");
+        }
+
+        if(pedido.getStatus() == StatusPedido.CANCELADO) {
+            throw new IllegalArgumentException("Pedido foi cancelado e não pode ser faturado");
+        }
+
+        if(pedido.getTipo() == TipoPedido.VENDA) {
+            for(PedidoProduto item : pedido.getItens()) {
+                if(item.getProduto().getQntdEstoque() < item.getQntd()) {
+                    throw new IllegalArgumentException("Estoque insuficiente para o produto: " + item.getProduto().getNome());
+                }
+                produtoService.removeStock(item.getProduto().getId(), item.getQntd());
+            }
+        } else if(pedido.getTipo() == TipoPedido.COMPRA) {
+            for(PedidoProduto item : pedido.getItens()) {
+                produtoService.addStock(item.getProduto().getId(), item.getQntd());
+            }
+        }
+
+        pedido.setStatus(StatusPedido.FATURADO);
+        Pedido updatedPedido = pedidoRepository.save(pedido);
+        return new PedidoResponseDTO(updatedPedido);
+    }
+
+    public PedidoResponseDTO cancelPedido(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
+
+        if(pedido.getStatus() == StatusPedido.FATURADO) {
+            throw new IllegalArgumentException("Não é possível cancelar um pedido faturado");
+        }
+
+        pedido.setStatus(StatusPedido.CANCELADO);
+        Pedido updatedPedido = pedidoRepository.save(pedido);
+        return new PedidoResponseDTO(updatedPedido);
+    }
+
     public Page<PedidoResponseDTO> getAllPedidos(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Pedido> pedidoPage = pedidoRepository.findAll(pageable);
         return pedidoPage.map(PedidoResponseDTO::new);
     }
 }
+
