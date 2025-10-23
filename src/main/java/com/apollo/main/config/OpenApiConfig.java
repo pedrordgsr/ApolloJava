@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
         version = "1.0",
         description = "API REST para sistema ERP Apollo com autenticação JWT",
         contact = @Contact(
-            name = "Apollo Team",
-            email = "suporte@apollo.com"
+            name = "Por Pedro Rodrigues da Rocha",
+            email = "pedrorodriguesssrrr@gmail.com"
         )
     ),
     servers = {

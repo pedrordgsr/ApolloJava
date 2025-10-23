@@ -35,7 +35,7 @@ public abstract class Pessoa {
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false, length = 45, unique = true)
     @Basic
     private String cpfcnpj;
 
@@ -47,7 +47,7 @@ public abstract class Pessoa {
     @Basic
     private String email;
 
-    @Column(nullable = true, length = 45)
+    @Column(nullable = true)
     @Basic
     private int telefone;
 
