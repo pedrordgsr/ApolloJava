@@ -66,5 +66,10 @@ public class AuthService {
 
         return new AuthResponse(token, savedUsuario.getUsername(), savedUsuario.getIdUsuario());
     }
-}
 
+    public void deleteUser(Long userId) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        usuarioRepository.delete(usuario);
+    }
+}

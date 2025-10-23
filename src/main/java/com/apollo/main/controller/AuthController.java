@@ -73,4 +73,28 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @Operation(
+        summary = "Excluir usuário",
+        description = "Exclui um usuário do sistema pelo ID"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Usuário excluído com sucesso"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Usuário não encontrado"
+        )
+    })
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        try {
+            authService.deleteUser(userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
