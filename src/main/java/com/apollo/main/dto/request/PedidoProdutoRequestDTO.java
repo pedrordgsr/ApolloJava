@@ -14,3 +14,4 @@ public class PedidoProdutoRequestDTO {
     private int qntd;
     private BigDecimal precoVendaUN;
 }
+

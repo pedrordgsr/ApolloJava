@@ -20,12 +20,12 @@ public class PessoaResponseDTO {
     private String cpfCnpj;
     private String ie;
     private String email;
-    private int telefone;
+    private String telefone;
     private String endereco;
     private String bairro;
     private String cidade;
     private String uf;
-    private int cep;
+    private String cep;
     private LocalDateTime dataCadastro;
 
     public PessoaResponseDTO(Pessoa pessoa){

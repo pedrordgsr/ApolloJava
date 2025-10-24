@@ -28,7 +28,7 @@ public class PessoaRequestDTO {
     @Email(message = "Email inválido")
     private String email;
 
-    private int telefone;
+    private String telefone;
 
     @NotBlank(message = "Endereço é obrigatório")
     private String endereco;
@@ -43,5 +43,5 @@ public class PessoaRequestDTO {
     private String uf;
 
     @NotNull(message = "CEP é obrigatório")
-    private int cep;
+    private String cep;
 }

@@ -47,9 +47,9 @@ public abstract class Pessoa {
     @Basic
     private String email;
 
-    @Column(nullable = true)
+    @Column(nullable = true,length = 45)
     @Basic
-    private int telefone;
+    private String telefone;
 
     @Column(nullable = false, length = 45)
     @Basic
@@ -67,9 +67,9 @@ public abstract class Pessoa {
     @Basic
     private String uf;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 45)
     @Basic
-    private int cep;
+    private String cep;
 
     @Column(nullable = false)
     @Basic
