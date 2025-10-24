@@ -74,10 +74,10 @@ public class PedidoService {
 
                 BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
 
-                valor = valor.add(produto.getPrecoVenda().multiply(qntdBigDecimal));
+                valor = valor.add(itemDto.getPrecoVendaUN().multiply(qntdBigDecimal));
                 custo = custo.add(produto.getPrecoCusto().multiply(qntdBigDecimal));
 
-                item.setPrecoVendaUN(produto.getPrecoVenda());
+                item.setPrecoVendaUN(itemDto.getPrecoVendaUN());
                 item.setPrecoCustoUN(produto.getPrecoCusto());
 
                 pedido.getItens().add(item);
@@ -119,10 +119,10 @@ public class PedidoService {
 
                 BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
 
-                valor = valor.add(produto.getPrecoVenda().multiply(qntdBigDecimal));
+                valor = valor.add(itemDto.getPrecoVendaUN().multiply(qntdBigDecimal));
                 custo = custo.add(produto.getPrecoCusto().multiply(qntdBigDecimal));
 
-                item.setPrecoVendaUN(produto.getPrecoVenda());
+                item.setPrecoVendaUN(itemDto.getPrecoVendaUN());
                 item.setPrecoCustoUN(produto.getPrecoCusto());
 
                 pedido.getItens().add(item);
