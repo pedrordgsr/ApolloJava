@@ -2,7 +2,7 @@ package com.apollo.main.controller;
 
 import com.apollo.main.dto.request.LoginRequest;
 import com.apollo.main.dto.request.RegisterRequest;
-import com.apollo.main.dto.response.AuthResponse;
+import com.apollo.main.dto.response.AuthResponseDTO;
 import com.apollo.main.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,7 +32,7 @@ public class AuthController {
         @ApiResponse(
             responseCode = "200",
             description = "Login realizado com sucesso",
-            content = @Content(schema = @Schema(implementation = AuthResponse.class))
+            content = @Content(schema = @Schema(implementation = AuthResponseDTO.class))
         ),
         @ApiResponse(
             responseCode = "400",
@@ -40,9 +40,9 @@ public class AuthController {
         )
     })
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequest request) {
         try {
-            AuthResponse response = authService.login(request);
+            AuthResponseDTO response = authService.login(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -57,7 +57,7 @@ public class AuthController {
         @ApiResponse(
             responseCode = "200",
             description = "Usuário registrado com sucesso",
-            content = @Content(schema = @Schema(implementation = AuthResponse.class))
+            content = @Content(schema = @Schema(implementation = AuthResponseDTO.class))
         ),
         @ApiResponse(
             responseCode = "400",
@@ -65,12 +65,12 @@ public class AuthController {
         )
     })
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
-            AuthResponse response = authService.register(request);
+            AuthResponseDTO response = authService.register(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

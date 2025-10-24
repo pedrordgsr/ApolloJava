@@ -2,7 +2,7 @@ package com.apollo.main.service;
 
 import com.apollo.main.dto.request.LoginRequest;
 import com.apollo.main.dto.request.RegisterRequest;
-import com.apollo.main.dto.response.AuthResponse;
+import com.apollo.main.dto.response.AuthResponseDTO;
 import com.apollo.main.model.Funcionario;
 import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.model.Usuario;
@@ -34,7 +34,7 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponseDTO login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getSenha())
         );
@@ -42,12 +42,23 @@ public class AuthService {
         Usuario usuario = (Usuario) authentication.getPrincipal();
         String token = jwtUtil.generateToken(usuario);
 
-        return new AuthResponse(token, usuario.getUsername(), usuario.getIdUsuario());
+        Long funcionarioId = usuario.getFuncionario() != null ? usuario.getFuncionario().getIdPessoa() : null;
+
+        return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId);
     }
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponseDTO register(RegisterRequest request) {
         if (usuarioRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username já está em uso");
+        }
+
+        if (request.getFuncionarioId() != null) {
+            Funcionario funcionario = funcionarioRepository.findById(request.getFuncionarioId())
+                    .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+
+            if (usuarioRepository.existsByFuncionario(funcionario)) {
+                throw new RuntimeException("Já existe um usuário associado a este funcionário");
+            }
         }
 
         Usuario usuario = new Usuario();
@@ -64,7 +75,9 @@ public class AuthService {
         Usuario savedUsuario = usuarioRepository.save(usuario);
         String token = jwtUtil.generateToken(savedUsuario);
 
-        return new AuthResponse(token, savedUsuario.getUsername(), savedUsuario.getIdUsuario());
+        Long funcionarioId = usuario.getFuncionario() != null ? usuario.getFuncionario().getIdPessoa() : null;
+
+        return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId);
     }
 
     public void deleteUser(Long userId) {
