@@ -25,23 +25,17 @@ public class PessoaRequestDTO {
 
     private String ie;
 
-    @Email(message = "Email inválido")
     private String email;
 
     private String telefone;
 
-    @NotBlank(message = "Endereço é obrigatório")
     private String endereco;
 
-    @NotBlank(message = "Bairro é obrigatório")
     private String bairro;
 
-    @NotBlank(message = "Cidade é obrigatória")
     private String cidade;
 
-    @NotBlank(message = "UF é obrigatório")
     private String uf;
 
-    @NotNull(message = "CEP é obrigatório")
     private String cep;
 }

@@ -43,31 +43,31 @@ public abstract class Pessoa {
     @Basic
     private String ie;
 
-    @Column(nullable = true, length = 45)
+    @Column(length = 45)
     @Basic
     private String email;
 
-    @Column(nullable = true,length = 45)
+    @Column(length = 45)
     @Basic
     private String telefone;
 
-    @Column(nullable = false, length = 45)
+    @Column
     @Basic
     private String endereco;
 
-    @Column(nullable = false, length = 45)
+    @Column
     @Basic
     private String bairro;
 
-    @Column(nullable = false, length = 45)
+    @Column
     @Basic
     private String cidade;
 
-    @Column(nullable = false, length = 45)
+    @Column(length = 45)
     @Basic
     private String uf;
 
-    @Column(nullable = false, length = 45)
+    @Column(length = 45)
     @Basic
     private String cep;
 

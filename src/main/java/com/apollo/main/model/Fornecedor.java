@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Fornecedor extends Pessoa{
 
     @Basic
-    @Column
+    @Column(nullable = false)
     private String tipoFornecedor;
 
     public Fornecedor() {
