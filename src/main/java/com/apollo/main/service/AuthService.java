@@ -3,6 +3,9 @@ package com.apollo.main.service;
 import com.apollo.main.dto.request.LoginRequest;
 import com.apollo.main.dto.request.RegisterRequest;
 import com.apollo.main.dto.response.AuthResponseDTO;
+import com.apollo.main.dto.response.ClienteResponseDTO;
+import com.apollo.main.dto.response.UsuarioResponseDTO;
+import com.apollo.main.model.Cliente;
 import com.apollo.main.model.Funcionario;
 import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.model.Usuario;
@@ -10,11 +13,15 @@ import com.apollo.main.repository.FuncionarioRepository;
 import com.apollo.main.repository.UsuarioRepository;
 import com.apollo.main.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AuthService {
@@ -78,6 +85,17 @@ public class AuthService {
         Long funcionarioId = usuario.getFuncionario() != null ? usuario.getFuncionario().getIdPessoa() : null;
 
         return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId);
+    }
+
+    public Page<UsuarioResponseDTO> getAllUsuarios(int size, int page) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+        return usuarios.map(UsuarioResponseDTO::new);
+    }
+
+    public UsuarioResponseDTO getUsuarioById(Long id){
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        return new UsuarioResponseDTO(usuario);
     }
 
     public void deleteUser(Long userId) {
