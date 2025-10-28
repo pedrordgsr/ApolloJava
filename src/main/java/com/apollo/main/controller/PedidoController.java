@@ -42,6 +42,16 @@ public class PedidoController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPedidoById(@PathVariable Long id) {
+        try {
+            PedidoResponseDTO response = pedidoService.getPedidoById(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
     @PostMapping("/invoice")
     public ResponseEntity<?> invoicePedido(@RequestParam Long pedidoId) {
         try {
@@ -65,7 +75,4 @@ public class PedidoController {
             return ResponseEntity.status(500).body(e);
         }
     }
-
-
-
 }

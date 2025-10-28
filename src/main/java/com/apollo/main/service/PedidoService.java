@@ -193,5 +193,11 @@ public class PedidoService {
         Page<Pedido> pedidoPage = pedidoRepository.findAll(pageable);
         return pedidoPage.map(PedidoResponseDTO::new);
     }
+
+    public PedidoResponseDTO getPedidoById(long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
+        return new PedidoResponseDTO(pedido);
+    }
 }
 
