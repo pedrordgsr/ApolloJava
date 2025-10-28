@@ -87,7 +87,7 @@ public class AuthService {
         return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId);
     }
 
-    public Page<UsuarioResponseDTO> getAllUsuarios(int size, int page) {
+    public Page<UsuarioResponseDTO> getAllUsuarios(int page, int size) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
         return usuarios.map(UsuarioResponseDTO::new);

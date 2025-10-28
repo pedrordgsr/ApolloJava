@@ -3,12 +3,14 @@ package com.apollo.main.controller;
 import com.apollo.main.dto.request.PedidoRequestDTO;
 import com.apollo.main.dto.response.PedidoResponseDTO;
 import com.apollo.main.service.PedidoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pedidos")
+@Tag(name = "Pedidos", description = "Endpoints para obter informações dos pedidos")
 public class PedidoController {
     private final PedidoService pedidoService;
 

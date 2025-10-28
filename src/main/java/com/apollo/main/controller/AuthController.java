@@ -97,23 +97,4 @@ public class AuthController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @GetMapping
-    public ResponseEntity<?> getAllUsuarios(@RequestParam (value = "page", defaultValue = "0") int page,
-                                            @RequestParam(value = "size", defaultValue = "10") int size) {
-        try{
-            return ResponseEntity.ok(authService.getAllUsuarios(page,size));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getUsuarioById(@PathVariable Long userId) {
-        try {
-            return ResponseEntity.ok(authService.getUsuarioById(userId));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 }
