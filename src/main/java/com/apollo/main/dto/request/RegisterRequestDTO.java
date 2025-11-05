@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Dados para registrar um novo usuário no sistema")
-public class RegisterRequest {
+public class RegisterRequestDTO {
     @NotBlank(message = "Username é obrigatório")
     @Schema(description = "Nome de usuário único", example = "usuario123")
     private String username;

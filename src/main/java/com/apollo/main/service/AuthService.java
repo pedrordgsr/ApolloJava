@@ -1,11 +1,10 @@
 package com.apollo.main.service;
 
 import com.apollo.main.dto.request.LoginRequest;
-import com.apollo.main.dto.request.RegisterRequest;
+import com.apollo.main.dto.request.RegisterRequestDTO;
+import com.apollo.main.dto.request.UpdateUsuarioRequestDTO;
 import com.apollo.main.dto.response.AuthResponseDTO;
-import com.apollo.main.dto.response.ClienteResponseDTO;
 import com.apollo.main.dto.response.UsuarioResponseDTO;
-import com.apollo.main.model.Cliente;
 import com.apollo.main.model.Funcionario;
 import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.model.Usuario;
@@ -20,8 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AuthService {
@@ -54,7 +51,7 @@ public class AuthService {
         return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId);
     }
 
-    public AuthResponseDTO register(RegisterRequest request) {
+    public AuthResponseDTO register(RegisterRequestDTO request) {
         if (usuarioRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username já está em uso");
         }
@@ -96,6 +93,29 @@ public class AuthService {
     public UsuarioResponseDTO getUsuarioById(Long id){
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         return new UsuarioResponseDTO(usuario);
+    }
+
+    public UsuarioResponseDTO updateUsuario(Long userId, UpdateUsuarioRequestDTO request) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Atualiza username se fornecido
+        if (request.getUsername() != null && !request.getUsername().isBlank()) {
+            // Verifica se o novo username já está em uso por outro usuário
+            if (!request.getUsername().equals(usuario.getUsername()) && 
+                usuarioRepository.existsByUsername(request.getUsername())) {
+                throw new RuntimeException("Username já está em uso");
+            }
+            usuario.setUsername(request.getUsername());
+        }
+
+        // Atualiza senha se fornecida
+        if (request.getSenha() != null && !request.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(request.getSenha()));
+        }
+
+        Usuario updatedUsuario = usuarioRepository.save(usuario);
+        return new UsuarioResponseDTO(updatedUsuario);
     }
 
     public void deleteUser(Long userId) {

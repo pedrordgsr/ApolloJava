@@ -1,7 +1,7 @@
 package com.apollo.main.controller;
 
 import com.apollo.main.dto.request.LoginRequest;
-import com.apollo.main.dto.request.RegisterRequest;
+import com.apollo.main.dto.request.RegisterRequestDTO;
 import com.apollo.main.dto.response.AuthResponseDTO;
 import com.apollo.main.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,7 +65,7 @@ public class AuthController {
         )
     })
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO request) {
         try {
             AuthResponseDTO response = authService.register(request);
             return ResponseEntity.ok(response);
