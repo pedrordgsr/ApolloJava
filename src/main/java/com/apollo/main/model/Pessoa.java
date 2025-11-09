@@ -22,32 +22,32 @@ public abstract class Pessoa {
     @Enumerated(EnumType.STRING)
     private StatusAtivo status;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false)
     @Basic
     private String nome;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false)
     @Basic
     private String categoria;
 
     @Basic
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa;
 
-    @Column(nullable = false, length = 45, unique = true)
+    @Column(nullable = false, unique = true)
     @Basic
     private String cpfcnpj;
 
-    @Column(nullable = true, length = 45)
+    @Column(nullable = true)
     @Basic
     private String ie;
 
-    @Column(length = 45)
+    @Column
     @Basic
     private String email;
 
-    @Column(length = 45)
+    @Column
     @Basic
     private String telefone;
 
