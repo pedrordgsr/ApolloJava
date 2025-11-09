@@ -1,6 +1,7 @@
 package com.apollo.main.controller;
 
 import com.apollo.main.dto.request.UpdateUsuarioRequestDTO;
+import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,6 +45,17 @@ public class UsuarioController {
                                            @Valid @RequestBody UpdateUsuarioRequestDTO request) {
         try {
             return ResponseEntity.ok(authService.updateUsuario(userId, request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Ativar ou inativar usuário")
+    @PutMapping("/{userId}/status")
+    public ResponseEntity<?> toggleUsuarioStatus(@PathVariable Long userId,
+                                                  @RequestParam StatusAtivo status) {
+        try {
+            return ResponseEntity.ok(authService.toggleUsuarioStatus(userId, status));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

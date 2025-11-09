@@ -13,5 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByUsername(String username);
 
     boolean existsByFuncionario(Funcionario funcionario);
+    Optional<Usuario> findByFuncionario(Funcionario funcionario);
 }
 

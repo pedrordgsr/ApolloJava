@@ -5,7 +5,9 @@ import com.apollo.main.dto.response.FuncionarioResponseDTO;
 import com.apollo.main.model.Funcionario;
 import com.apollo.main.model.StatusAtivo;
 import com.apollo.main.model.TipoPessoa;
+import com.apollo.main.model.Usuario;
 import com.apollo.main.repository.FuncionarioRepository;
+import com.apollo.main.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,15 +15,18 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    public FuncionarioService(FuncionarioRepository funcionarioRepository) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, UsuarioRepository usuarioRepository) {
         this.funcionarioRepository = funcionarioRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public FuncionarioResponseDTO create(FuncionarioRequestDTO dto){
@@ -106,6 +111,15 @@ public class FuncionarioService {
             funcionario.setStatus(StatusAtivo.INATIVO);
             funcionario.setDataDemissao(LocalDateTime.now());
             funcionarioRepository.save(funcionario);
+
+            // Inativar o usuário se o funcionário possuir um
+            Optional<Usuario> usuario = usuarioRepository.findByFuncionario(funcionario);
+            if(usuario.isPresent()){
+                Usuario user = usuario.get();
+                user.setStatusUsuario(StatusAtivo.INATIVO);
+                usuarioRepository.save(user);
+            }
+
             return (funcionario.getNome() + " Foi desligado da empresa!");
         }
     }
@@ -121,6 +135,15 @@ public class FuncionarioService {
             funcionario.setDataDemissao(null);
             funcionario.setDataAdmissao(LocalDateTime.now());
             funcionarioRepository.save(funcionario);
+
+            // Reativar o usuário se o funcionário possuir um
+            Optional<Usuario> usuario = usuarioRepository.findByFuncionario(funcionario);
+            if(usuario.isPresent()){
+                Usuario user = usuario.get();
+                user.setStatusUsuario(StatusAtivo.ATIVO);
+                usuarioRepository.save(user);
+            }
+
             return (funcionario.getNome() + " Foi readmitido na empresa!");
         }
     }

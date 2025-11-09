@@ -123,4 +123,14 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         usuarioRepository.delete(usuario);
     }
+
+    public UsuarioResponseDTO toggleUsuarioStatus(Long userId, StatusAtivo novoStatus) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuario.setStatusUsuario(novoStatus);
+        Usuario updatedUsuario = usuarioRepository.save(usuario);
+
+        return new UsuarioResponseDTO(updatedUsuario);
+    }
 }
