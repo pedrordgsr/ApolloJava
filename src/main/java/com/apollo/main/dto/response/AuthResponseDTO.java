@@ -25,10 +25,14 @@ public class AuthResponseDTO {
     @Schema(description = "ID do funcionario", example = "1")
     private Long funcionarioId;
 
-    public AuthResponseDTO(String token, String username, Long usuarioId, Long funcionarioId) {
+    @Schema(description = "Indica se o usuário é administrador", example = "true")
+    private Boolean isAdmin;
+
+    public AuthResponseDTO(String token, String username, Long usuarioId, Long funcionarioId, Boolean isAdmin) {
         this.token = token;
         this.username = username;
         this.usuarioId = usuarioId;
         this.funcionarioId = funcionarioId;
+        this.isAdmin = isAdmin;
     }
 }

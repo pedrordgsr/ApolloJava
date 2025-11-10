@@ -48,7 +48,7 @@ public class AuthService {
 
         Long funcionarioId = usuario.getFuncionario() != null ? usuario.getFuncionario().getIdPessoa() : null;
 
-        return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId);
+        return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId, usuario.getIsAdmin());
     }
 
     public AuthResponseDTO register(RegisterRequestDTO request) {
@@ -69,6 +69,7 @@ public class AuthService {
         usuario.setUsername(request.getUsername());
         usuario.setSenha(passwordEncoder.encode(request.getSenha()));
         usuario.setStatusUsuario(StatusAtivo.ATIVO);
+        usuario.setIsAdmin(false);
 
         if (request.getFuncionarioId() != null) {
             Funcionario funcionario = funcionarioRepository.findById(request.getFuncionarioId())
@@ -81,7 +82,7 @@ public class AuthService {
 
         Long funcionarioId = usuario.getFuncionario() != null ? usuario.getFuncionario().getIdPessoa() : null;
 
-        return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId);
+        return new AuthResponseDTO(token, usuario.getUsername(), usuario.getIdUsuario(), funcionarioId, usuario.getIsAdmin());
     }
 
     public Page<UsuarioResponseDTO> getAllUsuarios(int page, int size) {
@@ -132,5 +133,14 @@ public class AuthService {
         Usuario updatedUsuario = usuarioRepository.save(usuario);
 
         return new UsuarioResponseDTO(updatedUsuario);
+    }
+
+    public UsuarioResponseDTO toggleAdminStatus(Long userId) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuario.setIsAdmin(!Boolean.TRUE.equals(usuario.getIsAdmin()));
+
+        return new UsuarioResponseDTO(usuarioRepository.save(usuario));
     }
 }

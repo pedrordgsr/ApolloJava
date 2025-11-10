@@ -60,4 +60,14 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @Operation(summary = "Alternar status de administrador do usuário")
+    @PostMapping("/{userId}/admin-toggle")
+    public ResponseEntity<?> toggleAdminStatus(@PathVariable Long userId) {
+        try {
+            return ResponseEntity.ok(authService.toggleAdminStatus(userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

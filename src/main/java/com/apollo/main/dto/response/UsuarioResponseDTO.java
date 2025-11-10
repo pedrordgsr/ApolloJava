@@ -14,6 +14,7 @@ public class UsuarioResponseDTO {
     private String status;
     private String nome;
     private String cargo;
+    private Boolean isAdmin;
 
     public UsuarioResponseDTO(Usuario usuario){
         this.username = usuario.getUsername();
@@ -23,5 +24,6 @@ public class UsuarioResponseDTO {
         this.status = usuario.getStatusUsuario().name();
         this.nome = usuario.getFuncionario().getNome();
         this.cargo = usuario.getFuncionario().getCargo();
+        this.isAdmin = usuario.getIsAdmin();
     }
 }
