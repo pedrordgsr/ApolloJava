@@ -199,5 +199,118 @@ public class PedidoService {
                 .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
         return new PedidoResponseDTO(pedido);
     }
+
+    public PedidoResponseDTO updatePedido(Long id, PedidoRequestDTO dto) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
+
+        // Validar se o pedido pode ser editado
+        if (pedido.getStatus() == StatusPedido.FATURADO) {
+            throw new IllegalArgumentException("Não é possível editar um pedido faturado");
+        }
+
+        if (pedido.getStatus() == StatusPedido.CANCELADO) {
+            throw new IllegalArgumentException("Não é possível editar um pedido cancelado");
+        }
+
+        // Validar se o tipo do pedido não está sendo alterado
+        if (pedido.getTipo() != dto.getTipo()) {
+            throw new IllegalArgumentException("Não é possível alterar o tipo do pedido");
+        }
+
+        TipoPedido tipoPedido = dto.getTipo();
+
+        if (tipoPedido == TipoPedido.VENDA) {
+            Cliente cliente = clienteRepository.findById(dto.getIdPessoa())
+                    .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+
+            Funcionario funcionario = funcionarioRepository.findById(dto.getIdFuncionario())
+                    .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
+
+            // Atualizar dados do pedido (tipo não é alterado)
+            pedido.setVencimento(dto.getVencimento());
+            pedido.setFormaPagamento(dto.getFormaPagamento());
+            pedido.setPessoa(cliente);
+            pedido.setFuncionario(funcionario);
+
+            // Limpar itens antigos e adicionar novos
+            pedido.getItens().clear();
+
+            BigDecimal valor = new BigDecimal(0.0);
+            BigDecimal custo = new BigDecimal(0.0);
+
+            for (PedidoProdutoRequestDTO itemDto : dto.getItens()) {
+                var produto = produtoRepository.findById(itemDto.getProdutoId())
+                        .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + itemDto.getProdutoId()));
+
+                PedidoProduto item = new PedidoProduto();
+                item.setPedido(pedido);
+                item.setProduto(produto);
+                item.setQntd(itemDto.getQntd());
+
+                BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
+
+                valor = valor.add(itemDto.getPrecoVendaUN().multiply(qntdBigDecimal));
+                custo = custo.add(produto.getPrecoCusto().multiply(qntdBigDecimal));
+
+                item.setPrecoVendaUN(itemDto.getPrecoVendaUN());
+                item.setPrecoCustoUN(produto.getPrecoCusto());
+
+                pedido.getItens().add(item);
+            }
+
+            pedido.setTotalVenda(valor);
+            pedido.setTotalCusto(custo);
+            Pedido savedPedido = pedidoRepository.save(pedido);
+            return new PedidoResponseDTO(savedPedido);
+
+        } else if (tipoPedido == TipoPedido.COMPRA) {
+            Fornecedor fornecedor = fornecedorRepository.findById(dto.getIdPessoa())
+                    .orElseThrow(() -> new IllegalArgumentException("Fornecedor não encontrado"));
+
+            Funcionario funcionario = funcionarioRepository.findById(dto.getIdFuncionario())
+                    .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
+
+            // Atualizar dados do pedido (tipo não é alterado)
+            pedido.setVencimento(dto.getVencimento());
+            pedido.setFormaPagamento(dto.getFormaPagamento());
+            pedido.setPessoa(fornecedor);
+            pedido.setFuncionario(funcionario);
+
+            // Limpar itens antigos e adicionar novos
+            pedido.getItens().clear();
+
+            BigDecimal valor = new BigDecimal(0.0);
+            BigDecimal custo = new BigDecimal(0.0);
+
+            for (PedidoProdutoRequestDTO itemDto : dto.getItens()) {
+                var produto = produtoRepository.findById(itemDto.getProdutoId())
+                        .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + itemDto.getProdutoId()));
+
+                PedidoProduto item = new PedidoProduto();
+                item.setPedido(pedido);
+                item.setProduto(produto);
+                item.setQntd(itemDto.getQntd());
+
+                BigDecimal qntdBigDecimal = BigDecimal.valueOf(item.getQntd());
+
+                valor = valor.add(itemDto.getPrecoVendaUN().multiply(qntdBigDecimal));
+                custo = custo.add(produto.getPrecoCusto().multiply(qntdBigDecimal));
+
+                item.setPrecoVendaUN(itemDto.getPrecoVendaUN());
+                item.setPrecoCustoUN(produto.getPrecoCusto());
+
+                pedido.getItens().add(item);
+            }
+
+            pedido.setTotalVenda(valor);
+            pedido.setTotalCusto(custo);
+            Pedido savedPedido = pedidoRepository.save(pedido);
+            return new PedidoResponseDTO(savedPedido);
+
+        } else {
+            throw new IllegalArgumentException("Tipo de pedido inválido");
+        }
+    }
 }
 

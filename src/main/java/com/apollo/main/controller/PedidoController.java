@@ -75,4 +75,16 @@ public class PedidoController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePedido(@PathVariable Long id, @RequestBody PedidoRequestDTO dto) {
+        try {
+            PedidoResponseDTO response = pedidoService.updatePedido(id, dto);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }
