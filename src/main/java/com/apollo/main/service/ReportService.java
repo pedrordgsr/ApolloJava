@@ -1,10 +1,12 @@
 package com.apollo.main.service;
 
 import com.apollo.main.dto.response.DetalhePedidoRelatorioResponse;
+import com.apollo.main.dto.response.RankingProdutoResponse;
 import com.apollo.main.dto.response.RelatorioCompraPeriodoResponse;
 import com.apollo.main.dto.response.RelatorioPorPessoaResponse;
 import com.apollo.main.dto.response.RelatorioVendaPeriodoResponse;
 import com.apollo.main.model.Pedido;
+import com.apollo.main.model.PedidoProduto;
 import com.apollo.main.model.TipoPedido;
 import com.apollo.main.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -257,5 +261,77 @@ public class ReportService {
                 .totalVenda(pedido.getTotalVenda())
                 .formaPagamento(pedido.getFormaPagamento())
                 .build();
+    }
+
+    /**
+     * Gera ranking de produtos mais vendidos em um período
+     */
+    public List<RankingProdutoResponse> getRankingProdutosMaisVendidos(LocalDateTime dataInicio, LocalDateTime dataFim) {
+        // Busca todos os pedidos de venda faturados no período
+        List<Pedido> pedidosVenda = pedidoRepository.findAll().stream()
+                .filter(p -> p.getTipo() == TipoPedido.VENDA)
+                .filter(p -> p.getStatus() == com.apollo.main.model.StatusPedido.FATURADO)
+                .filter(p -> p.getDataEmissao() != null)
+                .filter(p -> !p.getDataEmissao().isBefore(dataInicio) && !p.getDataEmissao().isAfter(dataFim))
+                .collect(Collectors.toList());
+
+        // Agrupa os produtos vendidos
+        Map<Long, List<PedidoProduto>> produtosVendidos = pedidosVenda.stream()
+                .flatMap(pedido -> pedido.getItens().stream())
+                .collect(Collectors.groupingBy(item -> item.getProduto().getId()));
+
+        // Cria o ranking
+        AtomicInteger posicao = new AtomicInteger(1);
+        
+        return produtosVendidos.entrySet().stream()
+                .map(entry -> {
+                    PedidoProduto primeiroItem = entry.getValue().get(0);
+                    
+                    // Soma a quantidade total vendida
+                    Long quantidadeTotal = entry.getValue().stream()
+                            .mapToLong(PedidoProduto::getQntd)
+                            .sum();
+
+                    // Calcula o valor total vendido
+                    BigDecimal valorTotal = entry.getValue().stream()
+                            .map(item -> item.getPrecoVendaUN().multiply(BigDecimal.valueOf(item.getQntd())))
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                    // Calcula o custo total
+                    BigDecimal custoTotal = entry.getValue().stream()
+                            .map(item -> item.getPrecoCustoUN().multiply(BigDecimal.valueOf(item.getQntd())))
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                    // Calcula o lucro total
+                    BigDecimal lucroTotal = valorTotal.subtract(custoTotal);
+
+                    // Calcula a margem de lucro (percentual)
+                    BigDecimal margemLucro = valorTotal.compareTo(BigDecimal.ZERO) > 0
+                            ? lucroTotal.divide(valorTotal, 4, RoundingMode.HALF_UP)
+                                    .multiply(BigDecimal.valueOf(100))
+                                    .setScale(2, RoundingMode.HALF_UP)
+                            : BigDecimal.ZERO;
+
+                    // Calcula o ticket médio (valor total / quantidade de itens vendidos)
+                    BigDecimal ticketMedio = quantidadeTotal > 0
+                            ? valorTotal.divide(BigDecimal.valueOf(quantidadeTotal), 2, RoundingMode.HALF_UP)
+                            : BigDecimal.ZERO;
+
+                    return RankingProdutoResponse.builder()
+                            .idProduto(primeiroItem.getProduto().getId())
+                            .nome(primeiroItem.getProduto().getNome())
+                            .descricao(primeiroItem.getProduto().getDescricao())
+                            .quantidadeVendida(quantidadeTotal)
+                            .valorTotalVendido(valorTotal)
+                            .lucroTotal(lucroTotal)
+                            .margemLucro(margemLucro)
+                            .ticketMedio(ticketMedio)
+                            .build();
+                })
+                // Ordena por valor total vendido (decrescente)
+                .sorted((p1, p2) -> p2.getValorTotalVendido().compareTo(p1.getValorTotalVendido()))
+                // Adiciona a posição no ranking
+                .peek(produto -> produto.setPosicaoRanking(posicao.getAndIncrement()))
+                .collect(Collectors.toList());
     }
 }

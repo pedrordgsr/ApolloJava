@@ -1,6 +1,7 @@
 package com.apollo.main.controller;
 
 import com.apollo.main.dto.response.DetalhePedidoRelatorioResponse;
+import com.apollo.main.dto.response.RankingProdutoResponse;
 import com.apollo.main.dto.response.RelatorioCompraPeriodoResponse;
 import com.apollo.main.dto.response.RelatorioPorPessoaResponse;
 import com.apollo.main.dto.response.RelatorioVendaPeriodoResponse;
@@ -128,5 +129,21 @@ public class ReportController {
         
         List<DetalhePedidoRelatorioResponse> detalhes = reportService.getDetalhesPorFornecedor(idFornecedor, inicio, fim);
         return ResponseEntity.ok(detalhes);
+    }
+
+    @GetMapping("/produtos/ranking")
+    @Operation(summary = "Ranking de produtos mais vendidos", 
+               description = "Retorna o ranking dos produtos mais vendidos em um período específico, ordenado por quantidade vendida")
+    public ResponseEntity<List<RankingProdutoResponse>> getRankingProdutosMaisVendidos(
+            @Parameter(description = "Data de início (formato: dd/MM/yyyy)", example = "01/01/2025")
+            @RequestParam String dataInicio,
+            @Parameter(description = "Data de fim (formato: dd/MM/yyyy)", example = "31/12/2025")
+            @RequestParam String dataFim) {
+        
+        LocalDateTime inicio = parseDate(dataInicio).atStartOfDay();
+        LocalDateTime fim = parseDate(dataFim).atTime(23, 59, 59);
+        
+        List<RankingProdutoResponse> ranking = reportService.getRankingProdutosMaisVendidos(inicio, fim);
+        return ResponseEntity.ok(ranking);
     }
 }

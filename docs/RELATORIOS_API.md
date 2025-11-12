@@ -241,6 +241,77 @@ GET /api/relatorios/fornecedores/10/detalhes?dataInicio=01/01/2025&dataFim=31/01
 
 ---
 
+### 7. Ranking de Produtos Mais Vendidos
+**GET** `/produtos/ranking`
+
+Retorna o ranking dos produtos mais vendidos em um período específico, ordenado por valor total vendido. **Considera apenas pedidos faturados.**
+
+**Parâmetros:**
+- `dataInicio` (required): Data de início no formato dd/MM/yyyy
+- `dataFim` (required): Data de fim no formato dd/MM/yyyy
+
+**Exemplo de requisição:**
+```
+GET /api/relatorios/produtos/ranking?dataInicio=01/01/2025&dataFim=31/12/2025
+```
+
+**Resposta:**
+```json
+[
+  {
+    "idProduto": 5,
+    "nome": "Produto A",
+    "descricao": "Descrição do Produto A",
+    "quantidadeVendida": 150,
+    "valorTotalVendido": 15000.00,
+    "lucroTotal": 6000.00,
+    "margemLucro": 40.00,
+    "ticketMedio": 100.00,
+    "posicaoRanking": 1
+  },
+  {
+    "idProduto": 12,
+    "nome": "Produto B",
+    "descricao": "Descrição do Produto B",
+    "quantidadeVendida": 120,
+    "valorTotalVendido": 12000.00,
+    "lucroTotal": 4800.00,
+    "margemLucro": 40.00,
+    "ticketMedio": 100.00,
+    "posicaoRanking": 2
+  },
+  {
+    "idProduto": 3,
+    "nome": "Produto C",
+    "descricao": "Descrição do Produto C",
+    "quantidadeVendida": 95,
+    "valorTotalVendido": 9500.00,
+    "lucroTotal": 3800.00,
+    "margemLucro": 40.00,
+    "ticketMedio": 100.00,
+    "posicaoRanking": 3
+  }
+]
+```
+
+**Detalhes da Resposta:**
+- `idProduto`: ID único do produto
+- `nome`: Nome do produto
+- `descricao`: Descrição do produto
+- `quantidadeVendida`: Quantidade total de unidades vendidas no período
+- `valorTotalVendido`: Valor total das vendas do produto (soma de preço de venda × quantidade)
+- `lucroTotal`: Lucro total obtido com o produto (valor vendido - custo total)
+- `margemLucro`: Margem de lucro percentual ((lucro / valor vendido) × 100)
+- `ticketMedio`: Valor médio por unidade vendida (valor total / quantidade vendida)
+- `posicaoRanking`: Posição do produto no ranking (1 = mais vendido)
+
+**Observações:**
+- O ranking é ordenado pelo **valor total vendido** (decrescente)
+- Produtos que não foram vendidos no período não aparecem no ranking
+- Considera todos os itens de pedidos de venda com status FATURADO
+
+---
+
 ## Códigos de Status HTTP
 
 - `200 OK`: Requisição bem-sucedida
@@ -332,5 +403,11 @@ curl -X GET "http://localhost:8080/api/relatorios/fornecedores/10/detalhes" \
 ### Detalhes por Fornecedor com Período
 ```bash
 curl -X GET "http://localhost:8080/api/relatorios/fornecedores/10/detalhes?dataInicio=01/01/2025&dataFim=31/01/2025" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Ranking de Produtos Mais Vendidos
+```bash
+curl -X GET "http://localhost:8080/api/relatorios/produtos/ranking?dataInicio=01/01/2025&dataFim=31/12/2025" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
