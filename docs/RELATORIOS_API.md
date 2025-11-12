@@ -3,6 +3,8 @@
 ## Visão Geral
 Os endpoints de relatórios fornecem análises consolidadas sobre vendas, compras e relacionamentos com clientes e fornecedores.
 
+**IMPORTANTE:** Todos os relatórios consideram apenas pedidos com status **FATURADO**. Pedidos com status ORCAMENTO ou CANCELADO não são incluídos nos relatórios.
+
 ## Base URL
 ```
 /api/relatorios
@@ -13,7 +15,7 @@ Os endpoints de relatórios fornecem análises consolidadas sobre vendas, compra
 ### 1. Relatório de Vendas por Período
 **GET** `/vendas/periodo`
 
-Retorna estatísticas consolidadas de vendas em um período específico.
+Retorna estatísticas consolidadas de vendas em um período específico. **Considera apenas pedidos faturados.**
 
 **Parâmetros:**
 - `dataInicio` (required): Data de início no formato dd/MM/yyyy
@@ -42,7 +44,7 @@ GET /api/relatorios/vendas/periodo?dataInicio=01/01/2025&dataFim=31/01/2025
 ### 2. Relatório de Compras por Período
 **GET** `/compras/periodo`
 
-Retorna estatísticas consolidadas de compras em um período específico.
+Retorna estatísticas consolidadas de compras em um período específico. **Considera apenas pedidos faturados.**
 
 **Parâmetros:**
 - `dataInicio` (required): Data de início no formato dd/MM/yyyy
@@ -69,7 +71,7 @@ GET /api/relatorios/compras/periodo?dataInicio=01/01/2025&dataFim=31/01/2025
 ### 3. Relatório Consolidado por Cliente
 **GET** `/clientes`
 
-Retorna estatísticas de todos os clientes que realizaram compras, com possibilidade de filtrar por período.
+Retorna estatísticas de todos os clientes que realizaram compras, com possibilidade de filtrar por período. **Considera apenas pedidos faturados.**
 
 **Parâmetros:**
 - `dataInicio` (opcional): Data de início no formato dd/MM/yyyy
@@ -116,7 +118,7 @@ GET /api/relatorios/clientes?dataInicio=01/01/2025&dataFim=31/01/2025
 ### 4. Detalhamento de Pedidos por Cliente
 **GET** `/clientes/{idCliente}/detalhes`
 
-Retorna todos os pedidos de um cliente específico com detalhes, com possibilidade de filtrar por período.
+Retorna todos os pedidos de um cliente específico com detalhes, com possibilidade de filtrar por período. **Considera apenas pedidos faturados.**
 
 **Parâmetros:**
 - `idCliente` (path): ID do cliente
@@ -166,7 +168,7 @@ GET /api/relatorios/clientes/1/detalhes?dataInicio=01/01/2025&dataFim=31/01/2025
 ### 5. Relatório Consolidado por Fornecedor
 **GET** `/fornecedores`
 
-Retorna estatísticas de todos os fornecedores com os quais foram feitas compras, com possibilidade de filtrar por período.
+Retorna estatísticas de todos os fornecedores com os quais foram feitas compras, com possibilidade de filtrar por período. **Considera apenas pedidos faturados.**
 
 **Parâmetros:**
 - `dataInicio` (opcional): Data de início no formato dd/MM/yyyy
@@ -203,7 +205,7 @@ GET /api/relatorios/fornecedores?dataInicio=01/01/2025&dataFim=31/01/2025
 ### 6. Detalhamento de Pedidos por Fornecedor
 **GET** `/fornecedores/{idFornecedor}/detalhes`
 
-Retorna todos os pedidos de um fornecedor específico com detalhes, com possibilidade de filtrar por período.
+Retorna todos os pedidos de um fornecedor específico com detalhes, com possibilidade de filtrar por período. **Considera apenas pedidos faturados.**
 
 **Parâmetros:**
 - `idFornecedor` (path): ID do fornecedor
@@ -266,6 +268,10 @@ GET /api/relatorios/fornecedores/10/detalhes?dataInicio=01/01/2025&dataFim=31/01
    - Relatórios de **compras** consideram apenas pedidos do tipo `COMPRA`
    - Relatórios por **cliente** filtram pedidos de venda
    - Relatórios por **fornecedor** filtram pedidos de compra
+
+6. **Filtro por Status**: 
+   - **Apenas pedidos com status `FATURADO` são incluídos nos relatórios**
+   - Pedidos com status `ORCAMENTO` ou `CANCELADO` são excluídos automaticamente
 
 ## Exemplos de Uso com cURL
 

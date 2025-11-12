@@ -30,6 +30,7 @@ public class ReportService {
     public RelatorioVendaPeriodoResponse getRelatorioVendasPorPeriodo(LocalDateTime dataInicio, LocalDateTime dataFim) {
         List<Pedido> pedidos = pedidoRepository.findAll().stream()
                 .filter(p -> p.getTipo() == TipoPedido.VENDA)
+                .filter(p -> p.getStatus() == com.apollo.main.model.StatusPedido.FATURADO)
                 .filter(p -> p.getDataEmissao() != null)
                 .filter(p -> !p.getDataEmissao().isBefore(dataInicio) && !p.getDataEmissao().isAfter(dataFim))
                 .collect(Collectors.toList());
@@ -67,6 +68,7 @@ public class ReportService {
     public RelatorioCompraPeriodoResponse getRelatorioComprasPorPeriodo(LocalDateTime dataInicio, LocalDateTime dataFim) {
         List<Pedido> pedidos = pedidoRepository.findAll().stream()
                 .filter(p -> p.getTipo() == TipoPedido.COMPRA)
+                .filter(p -> p.getStatus() == com.apollo.main.model.StatusPedido.FATURADO)
                 .filter(p -> p.getDataEmissao() != null)
                 .filter(p -> !p.getDataEmissao().isBefore(dataInicio) && !p.getDataEmissao().isAfter(dataFim))
                 .collect(Collectors.toList());
@@ -102,6 +104,7 @@ public class ReportService {
     public List<RelatorioPorPessoaResponse> getRelatorioPorCliente(LocalDateTime dataInicio, LocalDateTime dataFim) {
         List<Pedido> pedidosVenda = pedidoRepository.findAll().stream()
                 .filter(p -> p.getTipo() == TipoPedido.VENDA)
+                .filter(p -> p.getStatus() == com.apollo.main.model.StatusPedido.FATURADO)
                 .filter(p -> p.getPessoa() != null)
                 .filter(p -> dataInicio == null || (p.getDataEmissao() != null && !p.getDataEmissao().isBefore(dataInicio)))
                 .filter(p -> dataFim == null || (p.getDataEmissao() != null && !p.getDataEmissao().isAfter(dataFim)))
@@ -157,6 +160,7 @@ public class ReportService {
     public List<RelatorioPorPessoaResponse> getRelatorioPorFornecedor(LocalDateTime dataInicio, LocalDateTime dataFim) {
         List<Pedido> pedidosCompra = pedidoRepository.findAll().stream()
                 .filter(p -> p.getTipo() == TipoPedido.COMPRA)
+                .filter(p -> p.getStatus() == com.apollo.main.model.StatusPedido.FATURADO)
                 .filter(p -> p.getPessoa() != null)
                 .filter(p -> dataInicio == null || (p.getDataEmissao() != null && !p.getDataEmissao().isBefore(dataInicio)))
                 .filter(p -> dataFim == null || (p.getDataEmissao() != null && !p.getDataEmissao().isAfter(dataFim)))
@@ -212,6 +216,7 @@ public class ReportService {
     public List<DetalhePedidoRelatorioResponse> getDetalhesPorCliente(Long idCliente, LocalDateTime dataInicio, LocalDateTime dataFim) {
         return pedidoRepository.findAll().stream()
                 .filter(p -> p.getTipo() == TipoPedido.VENDA)
+                .filter(p -> p.getStatus() == com.apollo.main.model.StatusPedido.FATURADO)
                 .filter(p -> p.getPessoa() != null && p.getPessoa().getIdPessoa().equals(idCliente))
                 .filter(p -> dataInicio == null || (p.getDataEmissao() != null && !p.getDataEmissao().isBefore(dataInicio)))
                 .filter(p -> dataFim == null || (p.getDataEmissao() != null && !p.getDataEmissao().isAfter(dataFim)))
@@ -232,6 +237,7 @@ public class ReportService {
     public List<DetalhePedidoRelatorioResponse> getDetalhesPorFornecedor(Long idFornecedor, LocalDateTime dataInicio, LocalDateTime dataFim) {
         return pedidoRepository.findAll().stream()
                 .filter(p -> p.getTipo() == TipoPedido.COMPRA)
+                .filter(p -> p.getStatus() == com.apollo.main.model.StatusPedido.FATURADO)
                 .filter(p -> p.getPessoa() != null && p.getPessoa().getIdPessoa().equals(idFornecedor))
                 .filter(p -> dataInicio == null || (p.getDataEmissao() != null && !p.getDataEmissao().isBefore(dataInicio)))
                 .filter(p -> dataFim == null || (p.getDataEmissao() != null && !p.getDataEmissao().isAfter(dataFim)))
