@@ -67,6 +67,10 @@ public class PedidoService {
                 var produto = produtoRepository.findById(itemDto.getProdutoId())
                         .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + itemDto.getProdutoId()));
 
+                if(produto.getStatus() != StatusAtivo.ATIVO) {
+                    throw new IllegalArgumentException("Produto inativo não pode ser adicionado ao pedido: " + produto.getNome());
+                }
+
                 PedidoProduto item = new PedidoProduto();
                 item.setPedido(pedido);
                 item.setProduto(produto);
@@ -111,6 +115,10 @@ public class PedidoService {
             for(PedidoProdutoRequestDTO itemDto : dto.getItens()) {
                 var produto = produtoRepository.findById(itemDto.getProdutoId())
                         .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + itemDto.getProdutoId()));
+
+                if(produto.getStatus() != StatusAtivo.ATIVO) {
+                    throw new IllegalArgumentException("Produto inativo não pode ser adicionado ao pedido: " + produto.getNome());
+                }
 
                 PedidoProduto item = new PedidoProduto();
                 item.setPedido(pedido);
@@ -157,6 +165,10 @@ public class PedidoService {
             throw new IllegalArgumentException("Pedido foi cancelado e não pode ser faturado");
         }
 
+        if(pedido.getStatus() == StatusPedido.NOTA_CANCELADA) {
+            throw new IllegalArgumentException("Nota fiscal foi cancelada e não pode ser faturada novamente");
+        }
+
         if(pedido.getTipo() == TipoPedido.VENDA) {
             for(PedidoProduto item : pedido.getItens()) {
                 if(item.getProduto().getQntdEstoque() < item.getQntd()) {
@@ -179,11 +191,23 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
 
-        if(pedido.getStatus() == StatusPedido.FATURADO) {
-            throw new IllegalArgumentException("Não é possível cancelar um pedido faturado");
+        if(pedido.getStatus() == StatusPedido.CANCELADO) {
+            throw new IllegalArgumentException("Pedido já está cancelado");
         }
 
-        pedido.setStatus(StatusPedido.CANCELADO);
+        if(pedido.getStatus() == StatusPedido.NOTA_CANCELADA) {
+            throw new IllegalArgumentException("Nota fiscal já está cancelada");
+        }
+
+        // Se o pedido foi faturado, mudar para NOTA_CANCELADA
+        // O ajuste de estoque deverá ser feito manualmente
+        if(pedido.getStatus() == StatusPedido.FATURADO) {
+            pedido.setStatus(StatusPedido.NOTA_CANCELADA);
+        } else {
+            // Se ainda é orçamento, cancela normalmente
+            pedido.setStatus(StatusPedido.CANCELADO);
+        }
+
         Pedido updatedPedido = pedidoRepository.save(pedido);
         return new PedidoResponseDTO(updatedPedido);
     }
@@ -211,6 +235,10 @@ public class PedidoService {
 
         if (pedido.getStatus() == StatusPedido.CANCELADO) {
             throw new IllegalArgumentException("Não é possível editar um pedido cancelado");
+        }
+
+        if (pedido.getStatus() == StatusPedido.NOTA_CANCELADA) {
+            throw new IllegalArgumentException("Não é possível editar uma nota fiscal cancelada");
         }
 
         // Validar se o tipo do pedido não está sendo alterado
@@ -242,6 +270,10 @@ public class PedidoService {
             for (PedidoProdutoRequestDTO itemDto : dto.getItens()) {
                 var produto = produtoRepository.findById(itemDto.getProdutoId())
                         .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + itemDto.getProdutoId()));
+
+                if(produto.getStatus() != StatusAtivo.ATIVO) {
+                    throw new IllegalArgumentException("Produto inativo não pode ser adicionado ao pedido: " + produto.getNome());
+                }
 
                 PedidoProduto item = new PedidoProduto();
                 item.setPedido(pedido);
@@ -286,6 +318,10 @@ public class PedidoService {
             for (PedidoProdutoRequestDTO itemDto : dto.getItens()) {
                 var produto = produtoRepository.findById(itemDto.getProdutoId())
                         .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + itemDto.getProdutoId()));
+
+                if(produto.getStatus() != StatusAtivo.ATIVO) {
+                    throw new IllegalArgumentException("Produto inativo não pode ser adicionado ao pedido: " + produto.getNome());
+                }
 
                 PedidoProduto item = new PedidoProduto();
                 item.setPedido(pedido);
