@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/relatorios")
+@RequestMapping("/relatorios")
 @RequiredArgsConstructor
 @Tag(name = "Relatórios", description = "Endpoints para geração de relatórios")
 public class ReportController {

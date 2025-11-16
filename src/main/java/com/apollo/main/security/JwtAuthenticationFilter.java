@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (method.equalsIgnoreCase("OPTIONS")) {
             return true;
         }
-        return path.startsWith("/api/auth");
+        return path.startsWith("/auth");
     }
 
     @Override
