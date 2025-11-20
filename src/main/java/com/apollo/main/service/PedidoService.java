@@ -47,6 +47,10 @@ public class PedidoService {
             Cliente cliente = clienteRepository.findById(dto.getIdPessoa())
                     .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
 
+            if(cliente.getStatus() != StatusAtivo.ATIVO) {
+                throw new IllegalArgumentException("Cliente inativo não pode ser utilizado para fazer pedidos");
+            }
+
             Funcionario funcionario = funcionarioRepository.findById(dto.getIdFuncionario())
                     .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
 
@@ -95,6 +99,10 @@ public class PedidoService {
         } else if (tipoPedido == TipoPedido.COMPRA) {
             Fornecedor fornecedor = fornecedorRepository.findById(dto.getIdPessoa())
                     .orElseThrow(() -> new IllegalArgumentException("Fornecedor não encontrado"));
+
+            if(fornecedor.getStatus() != StatusAtivo.ATIVO) {
+                throw new IllegalArgumentException("Fornecedor inativo não pode ser utilizado para fazer pedidos");
+            }
 
             Funcionario funcionario = funcionarioRepository.findById(dto.getIdFuncionario())
                     .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
@@ -167,6 +175,12 @@ public class PedidoService {
 
         if(pedido.getStatus() == StatusPedido.NOTA_CANCELADA) {
             throw new IllegalArgumentException("Nota fiscal foi cancelada e não pode ser faturada novamente");
+        }
+
+        // Validar se o cliente ou fornecedor está ativo
+        if(pedido.getPessoa().getStatus() != StatusAtivo.ATIVO) {
+            String tipo = pedido.getTipo() == TipoPedido.VENDA ? "Cliente" : "Fornecedor";
+            throw new IllegalArgumentException(tipo + " inativo não pode ser utilizado para faturar pedidos");
         }
 
         if(pedido.getTipo() == TipoPedido.VENDA) {
@@ -252,6 +266,10 @@ public class PedidoService {
             Cliente cliente = clienteRepository.findById(dto.getIdPessoa())
                     .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
 
+            if(cliente.getStatus() != StatusAtivo.ATIVO) {
+                throw new IllegalArgumentException("Cliente inativo não pode ser utilizado para fazer pedidos");
+            }
+
             Funcionario funcionario = funcionarioRepository.findById(dto.getIdFuncionario())
                     .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
 
@@ -299,6 +317,10 @@ public class PedidoService {
         } else if (tipoPedido == TipoPedido.COMPRA) {
             Fornecedor fornecedor = fornecedorRepository.findById(dto.getIdPessoa())
                     .orElseThrow(() -> new IllegalArgumentException("Fornecedor não encontrado"));
+
+            if(fornecedor.getStatus() != StatusAtivo.ATIVO) {
+                throw new IllegalArgumentException("Fornecedor inativo não pode ser utilizado para fazer pedidos");
+            }
 
             Funcionario funcionario = funcionarioRepository.findById(dto.getIdFuncionario())
                     .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
