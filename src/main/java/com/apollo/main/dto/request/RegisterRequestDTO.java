@@ -2,6 +2,8 @@ package com.apollo.main.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +19,7 @@ public class RegisterRequestDTO {
     @Schema(description = "Senha do usuário (será criptografada)", example = "senha123")
     private String senha;
 
-    @Schema(description = "ID do funcionário associado (opcional)", example = "1")
+    @NotNull(message = "Id do funcionário é obrigatório")
+    @Schema(description = "ID do funcionário associado", example = "1")
     private Long funcionarioId;
 }
