@@ -71,12 +71,6 @@ public class AuthService {
         usuario.setStatusUsuario(StatusAtivo.ATIVO);
         usuario.setIsAdmin(false);
 
-        if (request.getFuncionarioId() != null) {
-            Funcionario funcionario = funcionarioRepository.findById(request.getFuncionarioId())
-                    .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
-            usuario.setFuncionario(funcionario);
-        }
-
         Usuario savedUsuario = usuarioRepository.save(usuario);
         String token = jwtUtil.generateToken(savedUsuario);
 
