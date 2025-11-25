@@ -30,4 +30,8 @@ public class PessoaService {
         return pessoas.map(PessoaResponseDTO::new);
     }
 
+    public boolean isCpfCnpjDuplicated(String cpfcnpj) {
+        return pessoaRepository.existsByCpfcnpj(cpfcnpj);
+    }
+
 }
